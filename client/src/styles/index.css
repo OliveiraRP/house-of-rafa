@@ -1,0 +1,18 @@
+/* You can add global resets or mobile-specific styles here */
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  background: #f9f9f9;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 18px;
+  }
+}
