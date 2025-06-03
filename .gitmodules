@@ -1,0 +1,3 @@
+[submodule "apps/budgetmanager"]
+	path = apps/budgetmanager
+	url = https://github.com/OliveiraRP/budget-manager

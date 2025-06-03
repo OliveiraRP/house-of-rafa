@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/house-of-rafa/static/css/main.a0711ffc.css",
+    "main.js": "/house-of-rafa/static/js/main.4743b343.js",
+    "index.html": "/house-of-rafa/index.html",
+    "main.a0711ffc.css.map": "/house-of-rafa/static/css/main.a0711ffc.css.map",
+    "main.4743b343.js.map": "/house-of-rafa/static/js/main.4743b343.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a0711ffc.css",
+    "static/js/main.4743b343.js"
+  ]
+}
