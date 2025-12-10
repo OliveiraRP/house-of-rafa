@@ -1,0 +1,23 @@
+:root {
+  --color-bg-dark: #121212;
+  --color-bg-input: #1c1c1c;
+  --color-shadow: rgba(255, 255, 255, 0.05);
+  --color-accent: #4444ff;
+  --color-error: #ff6961;
+  --color-text: #d4d4d4;
+
+  --radius: 10px;
+  --spacing: 12px;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: black;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
