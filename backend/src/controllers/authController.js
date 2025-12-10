@@ -1,0 +1,53 @@
+import { pool } from "../config/db.js";
+
+export async function checkToken(req, res) {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ error: "Token required" });
+
+  try {
+    const result = await pool.query(
+      "SELECT username FROM users WHERE token = $1",
+      [token]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    const username = result.rows[0].username;
+
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 90,
+    });
+
+    res.json({ username });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+}
+
+export async function getCurrentUser(req, res) {
+  const token = req.cookies.authToken;
+
+  if (!token) return res.status(401).json({ error: "Not authenticated" });
+
+  try {
+    const result = await pool.query(
+      "SELECT username FROM users WHERE token = $1",
+      [token]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    res.json({ username: result.rows[0].username });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+}

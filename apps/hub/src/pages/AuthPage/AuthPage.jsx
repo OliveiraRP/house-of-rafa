@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkToken } from "../../api/auth.js"; // relative path
+import { checkToken } from "../../api/auth.js";
 import styles from "./AuthPage.module.css";
 
 import arrowIcon from "../../assets/icons/login.svg";
@@ -13,16 +13,25 @@ export default function AuthPage() {
 
   const handleSubmit = async () => {
     setError("");
-
     if (!token) return;
 
     try {
-      const data = await checkToken(token);
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("username", data.username);
+      const res = await fetch("http://localhost:3000/api/check-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+        credentials: "include", // important for cookie
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Invalid token");
+        return;
+      }
+
       navigate("/apps");
     } catch (err) {
-      setError(err.message);
+      setError("Network error");
     }
   };
 
