@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkToken } from "../../api/auth.js";
-import styles from "./AuthPage.module.css";
+import { AuthTemplate } from "../../ui/templates/AuthTemplate.jsx";
+import { EmptyBoxContainer } from "../../ui/containers/BoxContainer.jsx";
+import { InputLeftIconComponent } from "../../ui/components/InputComponent.jsx";
 
 import arrowIcon from "../../assets/icons/login.svg";
 import keyIcon from "../../assets/icons/key.svg";
@@ -20,7 +21,7 @@ export default function AuthPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
-        credentials: "include", // important for cookie
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -36,29 +37,22 @@ export default function AuthPage() {
   };
 
   return (
-    <div className={styles["auth-page"]}>
-      <div className={styles["auth-card"]}>
-        <div className={styles["auth-form"]}>
-          <div className={styles["input-wrapper"]}>
-            <img src={keyIcon} alt="" className={styles["input-icon"]} />
-            <input
-              type="text"
-              className={styles["auth-input"]}
-              value={token}
+    <AuthTemplate
+      component={
+        <EmptyBoxContainer
+          width={350}
+          content={
+            <InputLeftIconComponent
+              leftIcon={keyIcon}
+              submitButtonIcon={arrowIcon}
+              inputText={token}
+              errorText={error}
               onChange={(e) => setToken(e.target.value)}
+              onClick={handleSubmit}
             />
-          </div>
-          <button className={styles["auth-submit-btn"]} onClick={handleSubmit}>
-            <img
-              src={arrowIcon}
-              alt="Submit"
-              className={styles["auth-submit-icon"]}
-            />
-          </button>
-        </div>
-
-        {error && <p className={styles["auth-error"]}>{error}</p>}
-      </div>
-    </div>
+          }
+        />
+      }
+    />
   );
 }
