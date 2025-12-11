@@ -18,7 +18,7 @@ export async function checkToken(req, res) {
 
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 90,
     });

@@ -6,7 +6,7 @@ export default function HomePage() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await fetch("http://localhost:3000/api/me", {
+        const res = await fetch(`${BACKEND}/api/me`, {
           credentials: "include",
         });
         if (!res.ok) return;

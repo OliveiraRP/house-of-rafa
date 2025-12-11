@@ -9,4 +9,7 @@ export default defineConfig({
       "@ui": path.resolve(__dirname, "../../ui"),
     },
   },
+  server: {
+    host: "0.0.0.0",
+  },
 });

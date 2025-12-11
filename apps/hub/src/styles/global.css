@@ -1,6 +1,6 @@
 :root {
   --color-bg-dark: #121212;
-  --color-bg-input: #1c1c1c;
+  --color-bg-input: #1c1c1e;
   --color-shadow: rgba(255, 255, 255, 0.05);
   --color-accent: #4444ff;
   --color-error: #ff6961;
@@ -8,9 +8,22 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   background-color: black;
   margin: 0;
+}
+
+h1 {
+  font-size: 34px;
+  font-weight: bold;
+  margin: 0px;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0px;
 }
 
 *,

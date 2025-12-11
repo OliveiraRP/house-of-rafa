@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate.jsx";
-import { EmptyBoxContainer } from "@ui/containers/BoxContainer.jsx";
-import { InputComponent } from "@ui/components/InputComponent.jsx";
+import { ROUTES } from "../routes";
+import { BlankTemplate } from "@ui/templates/BlankTemplate";
+import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
+import { InputComponent } from "@ui/components/InputComponent";
 
-import arrowIcon from "../../assets/icons/login.svg";
-import keyIcon from "../../assets/icons/key.svg";
+import arrowIcon from "../assets/icons/login.svg";
+import keyIcon from "../assets/icons/key.svg";
 
 export default function AuthPage({ onLogin }) {
   const [token, setToken] = useState("");
@@ -17,7 +18,7 @@ export default function AuthPage({ onLogin }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/api/check-token", {
+      const res = await fetch(`${ROUTES.BACKEND}/api/check-token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
@@ -39,7 +40,7 @@ export default function AuthPage({ onLogin }) {
   };
 
   return (
-    <OneColumnTemplate
+    <BlankTemplate
       content={
         <EmptyBoxContainer
           content={
