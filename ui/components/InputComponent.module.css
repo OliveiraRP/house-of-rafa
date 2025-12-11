@@ -50,6 +50,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 24px;
+  padding-top: 12px;
   color: var(--color-error);
 }

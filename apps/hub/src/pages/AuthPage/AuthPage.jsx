@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { AuthTemplate } from "../../ui/templates/AuthTemplate.jsx";
-import { EmptyBoxContainer } from "../../ui/containers/BoxContainer.jsx";
-import { InputLeftIconComponent } from "../../ui/components/InputComponent.jsx";
+import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate.jsx";
+import { EmptyBoxContainer } from "@ui/containers/BoxContainer.jsx";
+import { InputComponent } from "@ui/components/InputComponent.jsx";
 
 import arrowIcon from "../../assets/icons/login.svg";
 import keyIcon from "../../assets/icons/key.svg";
@@ -39,19 +39,17 @@ export default function AuthPage({ onLogin }) {
   };
 
   return (
-    <AuthTemplate
-      component={
+    <OneColumnTemplate
+      content={
         <EmptyBoxContainer
-          width={350}
           content={
-            <InputLeftIconComponent
+            <InputComponent
               leftIcon={keyIcon}
               submitButtonIcon={arrowIcon}
               inputText={token}
               errorText={error}
               onChange={(e) => setToken(e.target.value)}
-              onClick={handleSubmit}
-              disabled={loading}
+              onSubmit={handleSubmit}
             />
           }
         />
