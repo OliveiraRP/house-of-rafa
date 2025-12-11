@@ -47,6 +47,9 @@
 }
 
 .error-text {
-  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
   color: var(--color-error);
 }

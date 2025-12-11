@@ -1,13 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AuthPage from "./pages/AuthPage/AuthPage.jsx";
-import AppsPage from "./pages/AppsPage/AppsPage.jsx";
+import RootPage from "./RootPage";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AuthPage />} />
-        <Route path="/apps" element={<AppsPage />} />
+        <Route path="/" element={<RootPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { fetchCurrentUser } from "../../api/auth.js";
 import styles from "./AppsPage.module.css";
 import budgetIcon from "../../assets/icons/key.svg";
 
 export default function AppsPage() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     async function loadUser() {
       const user = await fetchCurrentUser();
       if (!user) {
-        navigate("/");
         return;
       }
       setUsername(user.username);

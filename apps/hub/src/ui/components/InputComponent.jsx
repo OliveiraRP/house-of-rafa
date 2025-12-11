@@ -21,8 +21,7 @@ export function InputComponent({
           <img src={submitButtonIcon} alt="Submit" />
         </button>
       </div>
-
-      {errorText && <p className={styles["error-text"]}>{error}</p>}
+      {errorText && <div className={styles["error-text"]}>{errorText}</div>}
     </div>
   );
 }
@@ -51,8 +50,7 @@ export function InputLeftIconComponent({
           <IconRes icon={submitButtonIcon} alt="Submit" />
         </button>
       </div>
-
-      {errorText && <p className={styles["error-text"]}>{error}</p>}
+      {errorText && <div className={styles["error-text"]}>{errorText}</div>}
     </div>
   );
 }
