@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ROUTES } from "../routes";
+import { ROUTES } from "../config/routes";
 import { fetchCurrentUser } from "../api/auth";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { GridContainer } from "@ui/containers/GridContainer";
@@ -24,7 +24,7 @@ export default function HomePage() {
   }, []);
 
   const goToBudgetManager = () => {
-    window.location.href = `${ROUTES.BUDGET_MANAGER}`;
+    window.location.href = ROUTES.BUDGET_MANAGER;
   };
 
   const boxes = Array.from({ length: 9 }, (_, i) => (

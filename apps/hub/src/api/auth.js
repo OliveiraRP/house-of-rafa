@@ -1,7 +1,7 @@
-import { ROUTES } from "../routes.js";
+import { ROUTES, API } from "../config/routes";
 
 export async function checkToken(token) {
-  const res = await fetch(`${ROUTES.BACKEND}/api/check-token`, {
+  const res = await fetch(`${ROUTES.BACKEND}${API.CHECK_TOKEN}`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -18,7 +18,7 @@ export async function checkToken(token) {
 }
 
 export async function fetchCurrentUser() {
-  const res = await fetch(`${ROUTES.BACKEND}/api/me`, {
+  const res = await fetch(`${ROUTES.BACKEND}${API.ME}`, {
     credentials: "include",
   });
 

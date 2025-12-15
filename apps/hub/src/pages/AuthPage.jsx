@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ROUTES } from "../routes";
+import { ROUTES, API } from "../config/routes";
 import { BlankTemplate } from "@ui/templates/BlankTemplate";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { InputComponent } from "@ui/components/InputComponent";
@@ -18,7 +18,7 @@ export default function AuthPage({ onLogin }) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${ROUTES.BACKEND}/api/check-token`, {
+      const res = await fetch(`${ROUTES.BACKEND}${API.CHECK_TOKEN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
