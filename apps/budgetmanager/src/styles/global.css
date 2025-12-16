@@ -1,4 +1,12 @@
 :root {
+  --color-bg-dark: #121212;
+  --color-bg-input: #1c1c1e;
+  --color-shadow: rgba(255, 255, 255, 0.05);
+  --color-accent: #4444ff;
+  --color-error: #ff6961;
+  --color-content-secondary: #bcbcbc;
+  --color-content: #d4d4d4;
+
   /* ========= Backgrounds ========= */
   --color-bg-primary: #000000; /* App background */
   --color-bg-surface: #121212; /* Cards, sheets */

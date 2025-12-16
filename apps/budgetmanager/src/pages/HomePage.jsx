@@ -1,25 +1,20 @@
-import { useEffect, useState } from "react";
+import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
+import { TwoButtonPageHeaderContainer } from "@ui/containers/PageHeaderContainer";
+import { IconButtonComponent } from "@ui/components/ButtonComponent";
+
+import settingsIcon from "../assets/icons/settings.svg";
+import plusIcon from "../assets/icons/plus.svg";
 
 export default function HomePage() {
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    async function loadUser() {
-      try {
-        const res = await fetch(`${ROUTES.BACKEND}/api/me`, {
-          credentials: "include",
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        setUsername(data.username);
-      } catch {}
-    }
-    loadUser();
-  }, []);
-
   return (
-    <div>
-      <h1>Hello {username}</h1>
-    </div>
+    <OneColumnTemplate
+      header={
+        <TwoButtonPageHeaderContainer
+          leftButton={<IconButtonComponent icon={settingsIcon} />}
+          rightButton={<IconButtonComponent icon={plusIcon} />}
+          title="Wallets"
+        />
+      }
+    ></OneColumnTemplate>
   );
 }

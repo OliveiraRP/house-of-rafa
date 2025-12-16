@@ -1,12 +1,10 @@
 import styles from "./OneColumnTemplate.module.css";
 
-export function OneColumnTemplate({ title, content }) {
+export function OneColumnTemplate({ header, children }) {
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <h1>{title}</h1>
-      </header>
-      <main className={styles.content}>{content}</main>
+      <header>{header}</header>
+      <main className={styles.content}>{children}</main>
     </div>
   );
 }

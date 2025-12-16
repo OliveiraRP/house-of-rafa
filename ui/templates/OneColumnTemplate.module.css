@@ -1,8 +1,10 @@
 .page {
   display: flex;
   flex-direction: column;
-  padding: 58px 18px 0 18px;
-  color: var(--color-text);
+  padding: 0 16px 0 16px;
+  color: var(--color-text-primary);
+  padding-top: calc(44px + 5px);
+  margin-top: -44px; /* Pulls content under the navbar */
 }
 
 .content {

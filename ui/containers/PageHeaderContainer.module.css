@@ -1,0 +1,16 @@
+.buttons {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: none;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+}
+
+.title {
+  padding-top: 58px;
+}
