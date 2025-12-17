@@ -1,10 +1,17 @@
+import { motion } from "framer-motion";
 import { IconRes } from "../utils/IconRes";
 import styles from "./ButtonComponent.module.css";
 
 export function TextButtonComponent({ text, onClick, modifier }) {
   return (
     <div style={modifier}>
-      <button onClick={onClick}>{text}</button>
+      <motion.button
+        onClick={onClick}
+        whileTap={{ scale: 1.25 }}
+        transition={{ duration: 0.075 }}
+      >
+        {text}
+      </motion.button>
     </div>
   );
 }
@@ -12,9 +19,21 @@ export function TextButtonComponent({ text, onClick, modifier }) {
 export function IconButtonComponent({ icon, onClick, modifier }) {
   return (
     <div style={modifier}>
-      <button onClick={onClick} className={styles.iconButton}>
+      <motion.button
+        className={styles.iconButton}
+        onClick={onClick}
+        whileTap={{
+          scale: 1.25,
+          boxShadow: `
+            inset 0 0 20px rgba(255, 255, 255, 0.8),
+            inset 0 4px 8px rgba(255, 255, 255, 0.15),
+            10px 15px 20px rgba(0, 0, 0, 0.05)
+          `.trim(),
+        }}
+        transition={{ duration: 0.075 }}
+      >
         <IconRes icon={icon} alt="Add" className={styles.icon} />
-      </button>
+      </motion.button>
     </div>
   );
 }

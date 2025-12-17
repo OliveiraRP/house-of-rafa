@@ -53,3 +53,9 @@ h3 {
 *::after {
   box-sizing: border-box;
 }
+
+* {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}

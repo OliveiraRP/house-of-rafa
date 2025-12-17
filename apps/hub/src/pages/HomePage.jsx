@@ -3,7 +3,7 @@ import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { GridContainer } from "@ui/containers/GridContainer";
 import { AppComponent } from "@ui/components/AppComponent";
 import { PageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
-import { SectionHeaderComponent } from "../../../../ui/components/headers/SectionHeaderComponent";
+import { SectionHeaderComponent } from "@ui/components/headers/SectionHeaderComponent";
 
 import budgetManager from "../assets/icons/money-bag.png";
 
@@ -22,7 +22,7 @@ export default function HomePage() {
         header={<SectionHeaderComponent title="App List" />}
         columnCount={3}
       >
-        {boxes}{" "}
+        {boxes}
       </GridContainer>
     </OneColumnTemplate>
   );

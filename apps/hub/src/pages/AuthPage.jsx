@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ROUTES, API } from "../config/routes";
 import { BlankTemplate } from "@ui/templates/BlankTemplate";
-import { CardComponent } from "@ui/components/CardComponent";
+import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { InputComponent } from "@ui/components/InputComponent";
 
 import arrowIcon from "../assets/icons/login.svg";
@@ -42,7 +42,7 @@ export default function AuthPage({ onLogin }) {
   return (
     <BlankTemplate
       content={
-        <CardComponent>
+        <EmptyBoxContainer>
           <InputComponent
             leftIcon={keyIcon}
             submitButtonIcon={arrowIcon}
@@ -51,7 +51,7 @@ export default function AuthPage({ onLogin }) {
             onChange={(e) => setToken(e.target.value)}
             onSubmit={handleSubmit}
           />
-        </CardComponent>
+        </EmptyBoxContainer>
       }
     />
   );

@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@ui": path.resolve(__dirname, "../../ui"),
+      react: path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
     },
   },
   server: {
