@@ -2,7 +2,8 @@ import { ROUTES } from "../config/routes";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { GridContainer } from "@ui/containers/GridContainer";
 import { AppComponent } from "@ui/components/AppComponent";
-import { PageHeaderContainer } from "@ui/containers/PageHeaderContainer";
+import { PageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
+import { SectionHeaderComponent } from "../../../../ui/components/headers/SectionHeaderComponent";
 
 import budgetManager from "../assets/icons/money-bag.png";
 
@@ -16,8 +17,13 @@ export default function HomePage() {
   ));
 
   return (
-    <OneColumnTemplate header={<PageHeaderContainer title={"Discover"} />}>
-      <GridContainer columnCount={3} title="App list" content={boxes} />
+    <OneColumnTemplate header={<PageHeaderComponent title={"Discover"} />}>
+      <GridContainer
+        header={<SectionHeaderComponent title="App List" />}
+        columnCount={3}
+      >
+        {boxes}{" "}
+      </GridContainer>
     </OneColumnTemplate>
   );
 }

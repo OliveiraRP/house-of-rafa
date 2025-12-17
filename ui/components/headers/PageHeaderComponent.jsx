@@ -1,6 +1,6 @@
-import styles from "./PageHeaderContainer.module.css";
+import styles from "./PageHeaderComponent.module.css";
 
-export function PageHeaderContainer({ title, modifier }) {
+export function PageHeaderComponent({ title, modifier }) {
   return (
     <div style={modifier}>
       <div className={styles.title}>
@@ -10,7 +10,7 @@ export function PageHeaderContainer({ title, modifier }) {
   );
 }
 
-export function TwoButtonPageHeaderContainer({
+export function TwoButtonPageHeaderComponent({
   title,
   leftButton,
   rightButton,
