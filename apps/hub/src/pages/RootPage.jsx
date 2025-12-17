@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AuthPage from "./AuthPage";
 import HomePage from "./HomePage";
-import { fetchCurrentUser } from "../api/auth";
+import { fetchCurrentUser } from "../api/auth.api";
 
 export default function RootPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

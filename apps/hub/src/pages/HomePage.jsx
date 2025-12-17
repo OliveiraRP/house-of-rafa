@@ -1,4 +1,4 @@
-import { ROUTES } from "../config/routes";
+import { ENV } from "../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { GridContainer } from "@ui/containers/GridContainer";
 import { AppComponent } from "@ui/components/AppComponent";
@@ -9,7 +9,7 @@ import budgetManager from "../assets/icons/money-bag.png";
 
 export default function HomePage() {
   const goToBudgetManager = () => {
-    window.location.href = ROUTES.BUDGET_MANAGER;
+    window.location.href = ENV.BUDGET_MANAGER_URL;
   };
 
   const boxes = Array.from({ length: 9 }, (_, i) => (

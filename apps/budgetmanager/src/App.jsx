@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import WalletsPage from "./pages/WalletsPage.jsx";
+import RootPage from "./pages/RootPage.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WalletsPage />} />
+        <Route path="/*" element={<RootPage />} />
       </Routes>
     </BrowserRouter>
   );

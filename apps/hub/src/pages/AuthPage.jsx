@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ROUTES, API } from "../config/routes";
+import { checkToken } from "../api/auth.api";
 import { BlankTemplate } from "@ui/templates/BlankTemplate";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { InputComponent } from "@ui/components/InputComponent";
@@ -13,28 +13,17 @@ export default function AuthPage({ onLogin }) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setError("");
     if (!token) return;
 
+    setError("");
     setLoading(true);
+
     try {
-      const res = await fetch(`${ROUTES.BACKEND}${API.CHECK_TOKEN}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "Invalid token");
-        setLoading(false);
-        return;
-      }
-
+      await checkToken(token);
       onLogin();
     } catch (err) {
-      setError("Network error");
+      setError(err.message);
+    } finally {
       setLoading(false);
     }
   };

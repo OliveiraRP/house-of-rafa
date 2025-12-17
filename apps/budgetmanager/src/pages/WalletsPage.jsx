@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { ENV } from "../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
@@ -11,26 +12,42 @@ import settingsIcon from "../assets/icons/settings.svg";
 import plusIcon from "../assets/icons/plus.svg";
 
 export default function HomePage() {
-  // TODO: Replace with real data from backend/API
-  const getWallets = useCallback(() => {
-    return [
-      { id: 1, name: "Wallet 1", balance: "1234€" },
-      { id: 2, name: "Wallet 2", balance: "567€" },
-      { id: 3, name: "Wallet 3", balance: "8901€" },
-    ];
+  const [wallets, setWallets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchWallets() {
+      try {
+        const res = await fetch(`${ENV.BACKEND_URL}/api/v1/wallets`, {
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch wallets");
+
+        const data = await res.json();
+        setWallets(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchWallets();
   }, []);
 
-  const wallets = getWallets();
-
-  // TODO: Implement navigation to settings screen or open settings modal
   const handleSettingsPress = useCallback(() => {
     // TODO: Navigate to settings or open wallet settings
   }, []);
 
-  // TODO: Implement add new wallet flow (modal, form, etc.)
   const handleAddWalletPress = useCallback(() => {
-    // TODO: Open add wallet sheet/modal
+    // TODO: Open add wallet modal
   }, []);
+
+  if (loading) return <div>Loading wallets...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <OneColumnTemplate
