@@ -5,7 +5,7 @@ import { AppComponent } from "@ui/components/AppComponent";
 import { PageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { SectionHeaderComponent } from "@ui/components/headers/SectionHeaderComponent";
 
-import budgetManager from "../assets/icons/money-bag.png";
+import budgetManager from "@ui/assets/icons/money-bag.png";
 
 export default function HomePage() {
   const goToBudgetManager = () => {

@@ -3,28 +3,25 @@ import { checkToken } from "../api/auth.api";
 import { BlankTemplate } from "@ui/templates/BlankTemplate";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { InputComponent } from "@ui/components/InputComponent";
+import { IconRes } from "@ui/utils/IconRes";
 
-import arrowIcon from "../assets/icons/login.svg";
-import keyIcon from "../assets/icons/key.svg";
+import arrowIcon from "@ui/assets/icons/login.svg";
+import keyIcon from "@ui/assets/icons/key.svg";
 
 export default function AuthPage({ onLogin }) {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!token) return;
 
     setError("");
-    setLoading(true);
 
     try {
       await checkToken(token);
       onLogin();
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -33,8 +30,8 @@ export default function AuthPage({ onLogin }) {
       content={
         <EmptyBoxContainer>
           <InputComponent
-            leftIcon={keyIcon}
-            submitButtonIcon={arrowIcon}
+            leftIcon={<IconRes icon={keyIcon} />}
+            submitButtonIcon={<IconRes icon={arrowIcon} alt="Submit" />}
             inputText={token}
             errorText={error}
             onChange={(e) => setToken(e.target.value)}

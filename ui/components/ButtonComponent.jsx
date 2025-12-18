@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { IconRes } from "../utils/IconRes";
 import styles from "./ButtonComponent.module.css";
 
 export function TextButtonComponent({ text, onClick, modifier }) {
@@ -32,7 +31,7 @@ export function IconButtonComponent({ icon, onClick, modifier }) {
         }}
         transition={{ duration: 0.075 }}
       >
-        <IconRes icon={icon} alt="Add" className={styles.icon} />
+        {icon}
       </motion.button>
     </div>
   );

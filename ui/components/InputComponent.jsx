@@ -1,4 +1,3 @@
-import { IconRes } from "../utils/IconRes";
 import styles from "./InputComponent.module.css";
 
 export function InputComponent({
@@ -19,9 +18,7 @@ export function InputComponent({
       }}
     >
       <div className={styles["input-form"]}>
-        <div className={styles["input-left-icon"]}>
-          <IconRes icon={leftIcon} />
-        </div>
+        <div className={styles["input-left-icon"]}>{leftIcon}</div>
         <input
           type="text"
           className={styles["input-text"]}
@@ -29,7 +26,7 @@ export function InputComponent({
           onChange={onChange}
         />
         <button type="submit" className={styles["submit-button"]}>
-          <IconRes icon={submitButtonIcon} alt="Submit" />
+          {submitButtonIcon}
         </button>
       </div>
       {errorText && <div className={styles["error-text"]}>{errorText}</div>}

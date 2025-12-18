@@ -8,8 +8,8 @@ import { CardComponent } from "@ui/components/CardComponent";
 import { TextRes } from "@ui/utils/TextRes";
 import { IconRes } from "@ui/utils/IconRes";
 
-import settingsIcon from "../assets/icons/settings.svg";
-import plusIcon from "../assets/icons/plus.svg";
+import settingsIcon from "@ui/assets/icons/settings.svg";
+import plusIcon from "@ui/assets/icons/plus.svg";
 
 export default function HomePage() {
   const [wallets, setWallets] = useState([]);
@@ -55,13 +55,13 @@ export default function HomePage() {
         <TwoButtonPageHeaderComponent
           leftButton={
             <IconButtonComponent
-              icon={settingsIcon}
+              icon={<IconRes icon={settingsIcon} alt="Settings" />}
               onClick={handleSettingsPress}
             />
           }
           rightButton={
             <IconButtonComponent
-              icon={plusIcon}
+              icon={<IconRes icon={plusIcon} alt="Add" />}
               onClick={handleAddWalletPress}
             />
           }
