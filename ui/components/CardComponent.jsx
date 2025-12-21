@@ -1,8 +1,8 @@
 import styles from "./CardComponent.module.css";
 
-export function CardComponent({ title, description, icon }) {
+export function CardComponent({ title, description, icon, onClick }) {
   return (
-    <div className={styles.box}>
+    <div className={styles.box} onClick={onClick} role="button">
       <div className={styles.content}>
         <div className={styles.textColumn}>
           {title}

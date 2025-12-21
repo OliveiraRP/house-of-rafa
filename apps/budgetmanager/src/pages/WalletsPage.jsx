@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { ENV } from "../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
+import { CreateWalletPage } from "./CreateWalletPage";
+import { FullScreenOverlay } from "@ui/components/Overlay";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { SpacedVerticalListContainer } from "@ui/containers/VerticalListContainer";
@@ -11,8 +13,9 @@ import { IconRes } from "@ui/utils/IconRes";
 import settingsIcon from "@ui/assets/icons/settings.svg";
 import plusIcon from "@ui/assets/icons/plus.svg";
 
-export default function HomePage() {
+export default function WalletsPage() {
   const [wallets, setWallets] = useState([]);
+  const [isCreateWalletOpen, setIsCreateWalletOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -43,7 +46,11 @@ export default function HomePage() {
   }, []);
 
   const handleAddWalletPress = useCallback(() => {
-    // TODO: Open add wallet modal
+    setIsCreateWalletOpen(true);
+  }, []);
+
+  const handleWalletPress = useCallback(() => {
+    // TODO: Open wallet modal
   }, []);
 
   if (loading) return <div>Loading wallets...</div>;
@@ -87,9 +94,22 @@ export default function HomePage() {
               />
             }
             icon={<IconRes icon={settingsIcon} />}
+            onClick={handleWalletPress}
           />
         ))}
       </SpacedVerticalListContainer>
+
+      <FullScreenOverlay
+        isOpen={isCreateWalletOpen}
+        onClose={() => setIsCreateWalletOpen(false)}
+      >
+        <CreateWalletPage
+          onClose={() => {
+            setIsCreateWalletOpen(false);
+            fetchWallets();
+          }}
+        />
+      </FullScreenOverlay>
     </OneColumnTemplate>
   );
 }
