@@ -4,9 +4,7 @@ import { BlankTemplate } from "@ui/templates/BlankTemplate";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { InputComponent } from "@ui/components/InputComponent";
 import { IconRes } from "@ui/utils/IconRes";
-
-import arrowIcon from "@ui/assets/icons/login.svg";
-import keyIcon from "@ui/assets/icons/key.svg";
+import { ICON } from "@ui/constants/icons";
 
 export default function AuthPage({ onLogin }) {
   const [token, setToken] = useState("");
@@ -30,8 +28,8 @@ export default function AuthPage({ onLogin }) {
       content={
         <EmptyBoxContainer>
           <InputComponent
-            leftIcon={<IconRes icon={keyIcon} />}
-            submitButtonIcon={<IconRes icon={arrowIcon} alt="Submit" />}
+            leftIcon={<IconRes icon={ICON.KEY} />}
+            submitButtonIcon={<IconRes icon={ICON.LOGIN} alt="Submit" />}
             inputText={token}
             errorText={error}
             onChange={(e) => setToken(e.target.value)}

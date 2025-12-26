@@ -3,7 +3,7 @@ import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { TwoButtonSubtitlePageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { IconRes } from "@ui/utils/IconRes";
-import settingsIcon from "@ui/assets/icons/settings.svg";
+import { ICON } from "@ui/constants/icons";
 
 export function CreateWalletPage({ onClose }) {
   const [name, setName] = useState("");
@@ -20,7 +20,7 @@ export function CreateWalletPage({ onClose }) {
         <TwoButtonSubtitlePageHeaderComponent
           leftButton={
             <IconButtonComponent
-              icon={<IconRes icon={settingsIcon} alt="Settings" />}
+              icon={<IconRes icon={ICON.BACK} alt="Settings" />}
               onClick={onClose}
             />
           }

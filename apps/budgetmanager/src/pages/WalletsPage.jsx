@@ -4,14 +4,13 @@ import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { CreateWalletPage } from "./CreateWalletPage";
 import { FullScreenOverlay } from "@ui/components/Overlay";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
+import { TextButtonComponent } from "../../../../ui/components/ButtonComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { SpacedVerticalListContainer } from "@ui/containers/VerticalListContainer";
 import { CardComponent } from "@ui/components/CardComponent";
 import { TextRes } from "@ui/utils/TextRes";
 import { IconRes } from "@ui/utils/IconRes";
-
-import settingsIcon from "@ui/assets/icons/settings.svg";
-import plusIcon from "@ui/assets/icons/plus.svg";
+import { ICON } from "@ui/constants/icons";
 
 export default function WalletsPage() {
   const [wallets, setWallets] = useState([]);
@@ -61,14 +60,11 @@ export default function WalletsPage() {
       header={
         <TwoButtonPageHeaderComponent
           leftButton={
-            <IconButtonComponent
-              icon={<IconRes icon={settingsIcon} alt="Settings" />}
-              onClick={handleSettingsPress}
-            />
+            <TextButtonComponent text="Edit" onClick={handleSettingsPress} />
           }
           rightButton={
             <IconButtonComponent
-              icon={<IconRes icon={plusIcon} alt="Add" />}
+              icon={<IconRes icon={ICON.PLUS} alt="Add" />}
               onClick={handleAddWalletPress}
             />
           }
@@ -93,7 +89,7 @@ export default function WalletsPage() {
                 style={{ fontWeight: 700, fontSize: 24 }}
               />
             }
-            icon={<IconRes icon={settingsIcon} />}
+            icon={<IconRes icon={ICON.FALLBACK} />}
             onClick={handleWalletPress}
           />
         ))}
