@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import styles from "./Overlay.module.css";
+import styles from "./OverlayTemplate.module.css";
 
-export function FullScreenOverlay({ isOpen, onClose, children }) {
+export function FullScreenOverlayTemplate({ isOpen, onClose, children }) {
   const [isRendered, setIsRendered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 

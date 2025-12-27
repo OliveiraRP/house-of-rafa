@@ -4,6 +4,7 @@
   --color-bg-surface: #121212; /* Cards, sheets */
   --color-bg-elevated: #1c1c1e; /* Modals, inputs */
   --color-bg-hover: #2a2a2a; /* Hover / focus */
+  --color-bg-highlight: #3a3a3c; /* Highlights */
 
   /* ========= Text / Foreground ========= */
   --color-text-primary: #d4d4d4; /* Main text */

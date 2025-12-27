@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { ENV } from "../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { CreateWalletPage } from "./CreateWalletPage";
-import { FullScreenOverlay } from "@ui/components/Overlay";
+import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { TextButtonComponent } from "../../../../ui/components/ButtonComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
@@ -64,7 +64,7 @@ export default function WalletsPage() {
           }
           rightButton={
             <IconButtonComponent
-              icon={<IconRes icon={ICON.PLUS} alt="Add" />}
+              icon={<IconRes icon={ICON.ADD} alt="Add" />}
               onClick={handleAddWalletPress}
             />
           }
@@ -95,7 +95,7 @@ export default function WalletsPage() {
         ))}
       </SpacedVerticalListContainer>
 
-      <FullScreenOverlay
+      <FullScreenOverlayTemplate
         isOpen={isCreateWalletOpen}
         onClose={() => setIsCreateWalletOpen(false)}
       >
@@ -105,7 +105,7 @@ export default function WalletsPage() {
             fetchWallets();
           }}
         />
-      </FullScreenOverlay>
+      </FullScreenOverlayTemplate>
     </OneColumnTemplate>
   );
 }
