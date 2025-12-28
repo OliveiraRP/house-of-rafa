@@ -4,7 +4,8 @@ import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { CreateWalletPage } from "./CreateWalletPage";
 import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
-import { TextButtonComponent } from "../../../../ui/components/ButtonComponent";
+import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
+import { TextButtonComponent } from "@ui/components/ButtonComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { SpacedVerticalListContainer } from "@ui/containers/VerticalListContainer";
 import { CardComponent } from "@ui/components/CardComponent";
@@ -18,27 +19,27 @@ export default function WalletsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function fetchWallets() {
-      try {
-        const res = await fetch(`${ENV.BACKEND_URL}/api/v1/wallets`, {
-          credentials: "include",
-        });
+  const fetchWallets = useCallback(async () => {
+    try {
+      const res = await fetch(`${ENV.BACKEND_URL}/api/v1/wallets`, {
+        credentials: "include",
+      });
 
-        if (!res.ok) throw new Error("Failed to fetch wallets");
+      if (!res.ok) throw new Error("Failed to fetch wallets");
 
-        const data = await res.json();
-        setWallets(data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      const data = await res.json();
+      setWallets(data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    fetchWallets();
   }, []);
+
+  useEffect(() => {
+    fetchWallets();
+  }, [fetchWallets]);
 
   const handleSettingsPress = useCallback(() => {
     // TODO: Navigate to settings or open wallet settings
@@ -79,7 +80,7 @@ export default function WalletsPage() {
             title={
               <TextRes
                 text={wallet.name}
-                color="var(--color-accent-primary)"
+                color={wallet.color}
                 style={{ fontWeight: 600 }}
               />
             }
@@ -89,7 +90,18 @@ export default function WalletsPage() {
                 style={{ fontWeight: 700, fontSize: 24 }}
               />
             }
-            icon={<IconRes icon={ICON.FALLBACK} />}
+            icon={
+              <EmptyBoxContainer
+                onClick={() => navigateTo(2)}
+                color={wallet.color}
+                modifier={{
+                  height: "120px",
+                  width: "120px",
+                }}
+              >
+                <IconRes icon={wallet.icon} size={64} />
+              </EmptyBoxContainer>
+            }
             onClick={handleWalletPress}
           />
         ))}

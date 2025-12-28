@@ -1,9 +1,22 @@
 import styles from "./BoxContainer.module.css";
 
-export function EmptyBoxContainer({ children, modifier }) {
+export function EmptyBoxContainer({
+  children,
+  modifier,
+  color = "var(--color-bg-hover)",
+  onClick,
+}) {
   return (
-    <div style={modifier}>
-      <div className={styles.box}>{children}</div>
+    <div
+      className={styles.box}
+      onClick={onClick}
+      style={{
+        backgroundColor: color,
+        cursor: onClick ? "pointer" : "default",
+        ...modifier,
+      }}
+    >
+      {children}
     </div>
   );
 }

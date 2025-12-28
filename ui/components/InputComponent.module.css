@@ -2,7 +2,7 @@
   display: flex;
   height: 36px;
   width: 100%;
-  background-color: var(--color-bg-elevated);
+  background-color: var(--color-bg-highlight);
   border-radius: 10px;
   padding-left: 12px;
   overflow: hidden;
@@ -41,7 +41,7 @@
 .submit-button:hover {
   background: linear-gradient(
     90deg,
-    var(--color-bg-elevated),
+    var(--color-bg-highlight),
     var(--color-accent-primary)
   );
 }

@@ -34,3 +34,16 @@ export async function getWalletById(walletId, userId) {
   if (result.rows.length === 0) return null;
   return new Wallet(result.rows[0]);
 }
+
+export async function createWallet(userId, walletData) {
+  const { name, type, balance, includeInNetWorth, color, icon } = walletData;
+
+  const result = await pool.query(
+    `INSERT INTO wallets (user_id, name, type, initial_balance, balance, include_net_worth, color, icon)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     RETURNING *`,
+    [userId, name, type, balance, balance, includeInNetWorth, color, icon]
+  );
+
+  return new Wallet(result.rows[0]);
+}

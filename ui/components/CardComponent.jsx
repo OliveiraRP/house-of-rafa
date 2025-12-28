@@ -8,7 +8,7 @@ export function CardComponent({ title, description, icon, onClick }) {
           {title}
           {description}
         </div>
-        {icon && <div className={styles.iconWrapper}>{icon}</div>}
+        {icon}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import {
   getWalletsByUser,
   getWalletById,
+  createWallet,
 } from "../../repositories/budget-manager/wallets.repository.js";
 
 export async function listWallets(req, res) {
@@ -21,5 +22,15 @@ export async function getWallet(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });
+  }
+}
+
+export async function addWallet(req, res) {
+  try {
+    const newWallet = await createWallet(req.userId, req.body);
+    res.status(201).json(newWallet);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not create wallet" });
   }
 }
