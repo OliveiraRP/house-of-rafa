@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ENV } from "../config/env";
+import { ENV } from "../../config/env";
 import { useViewNavigation } from "@ui/hooks/useViewNavigation";
 import { ViewSwitcher } from "@ui/animations/ViewSwitcher";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
@@ -18,9 +18,9 @@ import { HorizontalColorPickerComponent } from "@ui/components/ColorPickerCompon
 
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
-import { WALLET_TYPES } from "../constants/wallets";
-import { PALETTE_LIST, WALLET_PALETTE } from "../constants/colors";
-import { WALLET_ICONS } from "../constants/icons";
+import { WALLET_TYPES } from "../../constants/wallets";
+import { PALETTE_LIST, WALLET_PALETTE } from "../../constants/colors";
+import { WALLET_ICONS } from "../../constants/icons";
 
 export function CreateWalletPage({ onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);

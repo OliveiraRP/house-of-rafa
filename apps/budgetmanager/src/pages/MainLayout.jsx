@@ -1,5 +1,5 @@
 import { useState } from "react";
-import WalletsPage from "./WalletsPage";
+import WalletsPage from "./wallets/WalletsPage";
 import { TabBarComponent } from "@ui/components/navigation/TabBarComponent";
 import { ICON } from "@ui/constants/icons";
 

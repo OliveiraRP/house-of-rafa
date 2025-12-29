@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import { ENV } from "../config/env";
+import { ENV } from "../../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { CreateWalletPage } from "./CreateWalletPage";
+import { WalletDetailsPage } from "./WalletDetailsPage";
 import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
@@ -16,6 +17,7 @@ import { ICON } from "@ui/constants/icons";
 export default function WalletsPage() {
   const [wallets, setWallets] = useState([]);
   const [isCreateWalletOpen, setIsCreateWalletOpen] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -50,8 +52,8 @@ export default function WalletsPage() {
     setIsCreateWalletOpen(true);
   }, []);
 
-  const handleWalletPress = useCallback(() => {
-    console.log("AAAAAAAAAAAA");
+  const handleWalletPress = useCallback((wallet) => {
+    setSelectedWallet(wallet);
   }, []);
 
   const handleArchiveWallet = async (walletId) => {
@@ -101,7 +103,7 @@ export default function WalletsPage() {
             key={wallet.id}
             isEditMode={isEditMode}
             onEditAction={() => handleArchiveWallet(wallet.id)}
-            onClick={handleWalletPress}
+            onClick={() => handleWalletPress(wallet)}
             title={
               <TextRes
                 text={wallet.name}
@@ -137,6 +139,16 @@ export default function WalletsPage() {
             setIsCreateWalletOpen(false);
             fetchWallets();
           }}
+        />
+      </FullScreenOverlayTemplate>
+
+      <FullScreenOverlayTemplate
+        isOpen={!!selectedWallet}
+        onClose={() => setSelectedWallet(null)}
+      >
+        <WalletDetailsPage
+          wallet={selectedWallet}
+          onClose={() => setSelectedWallet(null)}
         />
       </FullScreenOverlayTemplate>
     </OneColumnTemplate>
