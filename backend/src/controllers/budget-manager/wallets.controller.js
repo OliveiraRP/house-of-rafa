@@ -2,6 +2,7 @@ import {
   getWalletsByUser,
   getWalletById,
   createWallet,
+  archiveWalletById,
 } from "../../repositories/budget-manager/wallets.repository.js";
 
 export async function listWallets(req, res) {
@@ -32,5 +33,15 @@ export async function addWallet(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Could not create wallet" });
+  }
+}
+
+export async function archiveWallet(req, res) {
+  try {
+    const success = await archiveWalletById(req.params.id, req.userId);
+    if (!success) return res.status(404).json({ error: "Wallet not found" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
   }
 }

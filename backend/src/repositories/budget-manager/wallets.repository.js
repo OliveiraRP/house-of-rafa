@@ -47,3 +47,14 @@ export async function createWallet(userId, walletData) {
 
   return new Wallet(result.rows[0]);
 }
+
+export async function archiveWalletById(walletId, userId) {
+  const result = await pool.query(
+    `UPDATE wallets 
+     SET archived = true 
+     WHERE id = $1 AND user_id = $2 
+     RETURNING *`,
+    [walletId, userId]
+  );
+  return result.rowCount > 0;
+}

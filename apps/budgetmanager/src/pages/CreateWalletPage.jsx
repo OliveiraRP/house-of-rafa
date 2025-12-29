@@ -114,7 +114,7 @@ export function CreateWalletPage({ onClose }) {
                       width: "120px",
                     }}
                   >
-                    <IconRes icon={walletData.icon} size={64} color="white" />
+                    <IconRes icon={walletData.icon} size={80} />
                   </EmptyBoxContainer>
                 </div>
 

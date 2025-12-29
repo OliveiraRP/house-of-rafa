@@ -6,4 +6,5 @@ export const ICON = {
   LOGIN: "TbLogin2",
   KEY: "TbKey",
   CLOSE: "TbX",
+  ARCHIVE: "TbArchive",
 };

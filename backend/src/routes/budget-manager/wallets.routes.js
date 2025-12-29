@@ -3,6 +3,7 @@ import {
   listWallets,
   getWallet,
   addWallet,
+  archiveWallet,
 } from "../../controllers/budget-manager/wallets.controller.js";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 
@@ -13,5 +14,6 @@ router.use(authMiddleware);
 router.get("/", listWallets);
 router.post("/", addWallet);
 router.get("/:id", getWallet);
+router.patch("/:id/archive", archiveWallet);
 
 export default router;

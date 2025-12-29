@@ -16,6 +16,7 @@ import { ICON } from "@ui/constants/icons";
 export default function WalletsPage() {
   const [wallets, setWallets] = useState([]);
   const [isCreateWalletOpen, setIsCreateWalletOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -41,8 +42,8 @@ export default function WalletsPage() {
     fetchWallets();
   }, [fetchWallets]);
 
-  const handleSettingsPress = useCallback(() => {
-    // TODO: Navigate to settings or open wallet settings
+  const handleEditPress = useCallback(() => {
+    setIsEditMode((prev) => !prev);
   }, []);
 
   const handleAddWalletPress = useCallback(() => {
@@ -50,8 +51,29 @@ export default function WalletsPage() {
   }, []);
 
   const handleWalletPress = useCallback(() => {
-    // TODO: Open wallet modal
+    console.log("AAAAAAAAAAAA");
   }, []);
+
+  const handleArchiveWallet = async (walletId) => {
+    setWallets((prev) => prev.filter((w) => w.id !== walletId));
+
+    try {
+      const res = await fetch(
+        `${ENV.BACKEND_URL}/api/v1/wallets/${walletId}/archive`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        await fetchWallets();
+      } else {
+        console.error("Failed to archive on server");
+      }
+    } catch (err) {
+      console.error("Archive Error:", err);
+    }
+  };
 
   if (loading) return <div>Loading wallets...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -61,7 +83,7 @@ export default function WalletsPage() {
       header={
         <TwoButtonPageHeaderComponent
           leftButton={
-            <TextButtonComponent text="Edit" onClick={handleSettingsPress} />
+            <TextButtonComponent text="Edit" onClick={handleEditPress} />
           }
           rightButton={
             <IconButtonComponent
@@ -77,6 +99,9 @@ export default function WalletsPage() {
         {wallets.map((wallet) => (
           <CardComponent
             key={wallet.id}
+            isEditMode={isEditMode}
+            onEditAction={() => handleArchiveWallet(wallet.id)}
+            onClick={handleWalletPress}
             title={
               <TextRes
                 text={wallet.name}
@@ -92,17 +117,13 @@ export default function WalletsPage() {
             }
             icon={
               <EmptyBoxContainer
-                onClick={() => navigateTo(2)}
                 color={wallet.color}
-                modifier={{
-                  height: "120px",
-                  width: "120px",
-                }}
+                modifier={{ height: "64px", width: "64px" }}
               >
-                <IconRes icon={wallet.icon} size={64} />
+                <IconRes icon={wallet.icon} size={48} />
               </EmptyBoxContainer>
             }
-            onClick={handleWalletPress}
+            editIcon={ICON.ARCHIVE}
           />
         ))}
       </SpacedVerticalListContainer>
