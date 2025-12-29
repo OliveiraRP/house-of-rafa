@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ENV } from "../config/env.js";
 import { fetchCurrentUser } from "../api/auth.api";
-import WalletsPage from "./WalletsPage.jsx";
+import MainLayout from "./MainLayout.jsx";
 
 export default function RootPage() {
   const [user, setUser] = useState(null);
@@ -20,5 +20,5 @@ export default function RootPage() {
     checkAuth();
   }, []);
 
-  return <WalletsPage user={user} />;
+  return <MainLayout user={user} />;
 }

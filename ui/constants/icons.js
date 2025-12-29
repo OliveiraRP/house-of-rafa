@@ -7,4 +7,7 @@ export const ICON = {
   KEY: "TbKey",
   CLOSE: "TbX",
   ARCHIVE: "TbArchive",
+  EYE: "TbEye",
+  WALLET: "TbWallet",
+  CHART: "TbChartDonut",
 };
