@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { ENV } from "../../config/env";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { CreateWalletPage } from "./CreateWalletPage";
@@ -13,6 +13,8 @@ import { CardComponent } from "@ui/components/CardComponent";
 import { TextRes } from "@ui/utils/TextRes";
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
+import { WalletsBalanceInfo } from "../../ui/WalletsBalanceInfo";
+import { formatEuro } from "../../utils/currency";
 
 export default function WalletsPage() {
   const [wallets, setWallets] = useState([]);
@@ -44,6 +46,30 @@ export default function WalletsPage() {
     fetchWallets();
   }, [fetchWallets]);
 
+  const balanceSlides = useMemo(() => {
+    const eligibleWallets = wallets.filter((w) => w.includeNetWorth === true);
+    const totalBalance = eligibleWallets
+      .filter((w) => w.type !== "savings")
+      .reduce((sum, w) => sum + w.balance, 0);
+    const totalSavings = eligibleWallets
+      .filter((w) => w.type === "savings")
+      .reduce((sum, w) => sum + w.balance, 0);
+
+    const netWorth = totalBalance + totalSavings;
+
+    return [
+      { amount: formatEuro(totalBalance), label: "Total Balance" },
+      {
+        amount: formatEuro(totalSavings),
+        label: "Total Savings",
+      },
+      {
+        amount: formatEuro(netWorth),
+        label: "Total Net Worth",
+      },
+    ];
+  }, [wallets]);
+
   const handleEditPress = useCallback(() => {
     setIsEditMode((prev) => !prev);
   }, []);
@@ -67,13 +93,12 @@ export default function WalletsPage() {
           credentials: "include",
         }
       );
-      if (res.ok) {
+      if (!res.ok) {
         await fetchWallets();
-      } else {
-        console.error("Failed to archive on server");
       }
     } catch (err) {
       console.error("Archive Error:", err);
+      await fetchWallets();
     }
   };
 
@@ -85,7 +110,10 @@ export default function WalletsPage() {
       header={
         <TwoButtonPageHeaderComponent
           leftButton={
-            <TextButtonComponent text="Edit" onClick={handleEditPress} />
+            <TextButtonComponent
+              text={!isEditMode ? "Edit" : "Done"}
+              onClick={handleEditPress}
+            />
           }
           rightButton={
             <IconButtonComponent
@@ -97,6 +125,8 @@ export default function WalletsPage() {
         />
       }
     >
+      <WalletsBalanceInfo items={balanceSlides} />
+
       <SpacedVerticalListContainer>
         {wallets.map((wallet) => (
           <CardComponent
@@ -113,7 +143,7 @@ export default function WalletsPage() {
             }
             description={
               <TextRes
-                text={wallet.balance}
+                text={formatEuro(wallet.balance)}
                 style={{ fontWeight: 700, fontSize: 24 }}
               />
             }

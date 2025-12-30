@@ -14,19 +14,19 @@ import {
   TextListItemComponent,
   SwitchListItemComponent,
 } from "@ui/components/ListItemComponent";
-import { HorizontalColorPickerComponent } from "@ui/components/ColorPickerComponent";
-
+import { WalletDetailsCard } from "../../ui/WalletDetailsCard";
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
 import { WALLET_TYPES } from "../../constants/wallets";
 import { PALETTE_LIST, WALLET_PALETTE } from "../../constants/colors";
 import { WALLET_ICONS } from "../../constants/icons";
+import { formatEuro } from "../../utils/currency";
 
 export function CreateWalletPage({ onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
 
   const [walletData, setWalletData] = useState({
-    name: "",
+    name: "New Wallet",
     icon: WALLET_ICONS.at(0),
     color: WALLET_PALETTE.INDIGO.id,
     type: WALLET_TYPES.EXPENSE,
@@ -100,43 +100,21 @@ export function CreateWalletPage({ onClose }) {
                   />
                 }
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <EmptyBoxContainer
-                    color={selectedColorHex}
-                    onClick={() => navigateTo(2)}
-                    modifier={{
-                      height: "120px",
-                      width: "120px",
-                    }}
-                  >
-                    <IconRes icon={walletData.icon} size={80} />
-                  </EmptyBoxContainer>
-                </div>
-
-                <EmptyBoxContainer>
-                  <HorizontalColorPickerComponent
-                    colors={PALETTE_LIST}
-                    selectedColorId={walletData.color}
-                    onSelect={(id) =>
-                      setWalletData((prev) => ({ ...prev, color: id }))
-                    }
-                  />
-                </EmptyBoxContainer>
-
+                <WalletDetailsCard
+                  name={walletData.name}
+                  icon={walletData.icon}
+                  colors={PALETTE_LIST}
+                  selectedColorId={walletData.color}
+                  selectedColorHex={selectedColorHex}
+                  onSelect={(id) =>
+                    setWalletData((prev) => ({ ...prev, color: id }))
+                  }
+                  onIconClick={() => navigateTo(2)}
+                  onNameChange={(newName) =>
+                    setWalletData((prev) => ({ ...prev, name: newName }))
+                  }
+                />
                 <VerticalListContainer>
-                  <InputListItemComponent
-                    text="Name"
-                    value={walletData.name}
-                    placeholder="Name"
-                    onChange={(val) =>
-                      setWalletData({ ...walletData, name: val })
-                    }
-                  />
                   <TextListItemComponent
                     text="Type"
                     value={walletData.type}
@@ -144,7 +122,9 @@ export function CreateWalletPage({ onClose }) {
                   />
                   <InputListItemComponent
                     text="Balance"
-                    value={walletData.balance}
+                    value={
+                      walletData.balance ? formatEuro(walletData.balance) : ""
+                    }
                     placeholder="€0.00"
                     inputMode="decimal"
                     onChange={(val) => {

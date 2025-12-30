@@ -5,6 +5,7 @@
   color: var(--color-text-primary);
   padding-top: calc(44px + 5px);
   margin-top: -44px; /* Pulls content under the navbar */
+  padding-bottom: 98px;
 }
 
 .content {

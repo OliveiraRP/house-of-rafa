@@ -20,6 +20,7 @@ import { ICON } from "@ui/constants/icons";
 import { WalletDetailsCard } from "../../ui/WalletDetailsCard";
 import { getColorIdFromHex, PALETTE_LIST } from "../../constants/colors";
 import { WALLET_ICONS } from "../../constants/icons";
+import { formatEuro } from "../../utils/currency";
 
 export function WalletDetailsPage({ wallet, onClose }) {
   const [transactions, setTransactions] = useState([]);
@@ -149,15 +150,14 @@ export function WalletDetailsPage({ wallet, onClose }) {
                       }
                       let amountDisplay = "";
                       let amountColor = "var(--color-text-primary)";
-
                       if (t.type === "income") {
-                        amountDisplay = `+€${t.amount}`;
+                        amountDisplay = `+${formatEuro(t.amount)}`;
                         amountColor = "var(--color-income)";
                       } else if (t.type === "expense") {
-                        amountDisplay = `€${Math.abs(t.amount)}`;
+                        amountDisplay = formatEuro(t.amount);
                         amountColor = "var(--color-text-primary)";
                       } else if (t.type === "transfer") {
-                        amountDisplay = `(€${Math.abs(t.amount)})`;
+                        amountDisplay = `(${formatEuro(t.amount)})`;
                         amountColor = "var(--color-text-secondary)";
                       }
 
@@ -204,7 +204,7 @@ export function WalletDetailsPage({ wallet, onClose }) {
                   {wallet.goal !== null && (
                     <InputListItemComponent
                       text="Goal amount"
-                      value={walletData.goal}
+                      value={walletData.goal ? formatEuro(walletData.goal) : ""}
                       placeholder="€0.00"
                       inputMode="decimal"
                       onChange={(val) => {
@@ -220,7 +220,11 @@ export function WalletDetailsPage({ wallet, onClose }) {
                   {wallet.annualBudget !== null && (
                     <InputListItemComponent
                       text="Annual budget amount"
-                      value={walletData.annualBudget}
+                      value={
+                        walletData.annualBudget
+                          ? formatEuro(walletData.annualBudget)
+                          : ""
+                      }
                       placeholder="€0.00"
                       inputMode="decimal"
                       onChange={(val) => {
