@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { ENV } from "../../config/env";
 import { useViewNavigation } from "@ui/hooks/useViewNavigation";
 import { ViewSwitcher } from "@ui/animations/ViewSwitcher";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { TwoButtonSubtitlePageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { VerticalListContainer } from "@ui/containers/VerticalListContainer";
-import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { GridContainer } from "@ui/containers/GridContainer";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import {
@@ -21,9 +19,11 @@ import { WALLET_TYPES } from "../../constants/wallets";
 import { PALETTE_LIST, WALLET_PALETTE } from "../../constants/colors";
 import { WALLET_ICONS } from "../../constants/icons";
 import { formatEuro } from "../../utils/currency";
+import { useCreateWallet } from "../../hooks/useWallets";
 
 export function CreateWalletPage({ onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
+  const createMutation = useCreateWallet();
 
   const [walletData, setWalletData] = useState({
     name: "New Wallet",
@@ -34,40 +34,21 @@ export function CreateWalletPage({ onClose }) {
     includeInNetWorth: true,
   });
 
-  const handleSubmit = async () => {
-    if (!walletData.name.trim()) return alert("Wallet name is required");
-
+  const handleSubmit = () => {
     const colorHex = WALLET_PALETTE[walletData.color.toUpperCase()]?.hex;
+    const payload = {
+      name: walletData.name,
+      type: walletData.type.toLowerCase(),
+      balance: Number(walletData.balance),
+      includeInNetWorth: walletData.includeInNetWorth,
+      color: colorHex,
+      icon: walletData.icon,
+    };
 
-    try {
-      const response = await fetch(`${ENV.BACKEND_URL}/api/v1/wallets`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: walletData.name,
-          type: walletData.type.toLowerCase(),
-          balance: Number(walletData.balance),
-          includeInNetWorth: walletData.includeInNetWorth,
-          color: colorHex,
-          icon: walletData.icon,
-        }),
-      });
-
-      if (response.ok) {
-        const savedWallet = await response.json();
-        console.log("Wallet Created:", savedWallet);
-        onClose();
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || "Failed to save wallet");
-      }
-    } catch (err) {
-      console.error("Network Error:", err);
-      alert("Server unreachable");
-    }
+    createMutation.mutate(payload, {
+      onSuccess: onClose,
+      onError: (err) => alert(err.message),
+    });
   };
 
   const selectedColorHex = WALLET_PALETTE[walletData.color.toUpperCase()]?.hex;
@@ -92,6 +73,7 @@ export function CreateWalletPage({ onClose }) {
                       <IconButtonComponent
                         icon={<IconRes icon={ICON.ADD} />}
                         onClick={handleSubmit}
+                        disabled={createMutation.isPending}
                         style={{
                           backgroundColor: "var(--color-accent-primary)",
                         }}
@@ -149,7 +131,6 @@ export function CreateWalletPage({ onClose }) {
                 </VerticalListContainer>
               </OneColumnTemplate>
             );
-
           case 1:
             return (
               <OneColumnTemplate
@@ -179,7 +160,6 @@ export function CreateWalletPage({ onClose }) {
                 </VerticalListContainer>
               </OneColumnTemplate>
             );
-
           case 2:
             return (
               <OneColumnTemplate
@@ -210,7 +190,6 @@ export function CreateWalletPage({ onClose }) {
                 </GridContainer>
               </OneColumnTemplate>
             );
-
           default:
             return null;
         }

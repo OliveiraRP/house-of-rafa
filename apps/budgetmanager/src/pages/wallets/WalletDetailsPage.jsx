@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { ENV } from "../../config/env";
+import { useState, useMemo } from "react";
 import { ViewSwitcher } from "@ui/animations/ViewSwitcher";
 import { useViewNavigation } from "@ui/hooks/useViewNavigation";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
@@ -21,10 +20,18 @@ import { WalletDetailsCard } from "../../ui/WalletDetailsCard";
 import { getColorIdFromHex, PALETTE_LIST } from "../../constants/colors";
 import { WALLET_ICONS } from "../../constants/icons";
 import { formatEuro } from "../../utils/currency";
+import { useTransactions } from "../../hooks/useTransactions";
+import { useUpdateWallet } from "../../hooks/useWallets";
 
 export function WalletDetailsPage({ wallet, onClose }) {
-  const [transactions, setTransactions] = useState([]);
   const { view, direction, navigateTo } = useViewNavigation(0);
+  const { data: allTransactions = [] } = useTransactions(wallet?.id);
+  const updateMutation = useUpdateWallet();
+
+  const transactions = useMemo(
+    () => allTransactions.slice(0, 5),
+    [allTransactions]
+  );
 
   const [walletData, setWalletData] = useState(() => ({
     name: wallet?.name || "",
@@ -35,33 +42,12 @@ export function WalletDetailsPage({ wallet, onClose }) {
     annualBudget: wallet?.annualBudget ?? null,
   }));
 
-  useEffect(() => {
-    async function getTransactions() {
-      if (!wallet?.id) return;
-      try {
-        const res = await fetch(
-          `${ENV.BACKEND_URL}/api/v1/transactions/wallet/${wallet.id}`,
-          { credentials: "include" }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setTransactions(data.slice(0, 5));
-        }
-      } catch (err) {
-        console.error("Failed to fetch transactions:", err);
-      }
-    }
-
-    getTransactions();
-  }, [wallet?.id]);
-
   if (!wallet) return null;
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const selectedHex = PALETTE_LIST.find(
       (c) => c.id === walletData.color
     )?.hex;
-
     const payload = {
       name: walletData.name,
       icon: walletData.icon,
@@ -71,28 +57,7 @@ export function WalletDetailsPage({ wallet, onClose }) {
       annualBudget: walletData.annualBudget,
     };
 
-    try {
-      const res = await fetch(
-        `${ENV.BACKEND_URL}/api/v1/wallets/${wallet.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-          credentials: "include",
-        }
-      );
-
-      if (res.ok) {
-        onClose();
-      } else {
-        const errorData = await res.json();
-        console.error("Update failed:", errorData.error);
-      }
-    } catch (err) {
-      console.error("Network error during wallet update:", err);
-    }
+    updateMutation.mutate({ id: wallet.id, payload }, { onSuccess: onClose });
   };
 
   return (
@@ -144,20 +109,18 @@ export function WalletDetailsPage({ wallet, onClose }) {
                     }
                   >
                     {transactions.map((t) => {
-                      let subText = t.description;
-                      if (t.type === "transfer") {
-                        subText = `${t.fromWalletName} → ${t.toWalletName}`;
-                      }
-                      let amountDisplay = "";
+                      let subText =
+                        t.type === "transfer"
+                          ? `${t.fromWalletName} → ${t.toWalletName}`
+                          : t.description;
                       let amountColor = "var(--color-text-primary)";
+                      let amountDisplay = formatEuro(t.amount);
+
                       if (t.type === "income") {
-                        amountDisplay = `+${formatEuro(t.amount)}`;
+                        amountDisplay = `+${amountDisplay}`;
                         amountColor = "var(--color-income)";
-                      } else if (t.type === "expense") {
-                        amountDisplay = formatEuro(t.amount);
-                        amountColor = "var(--color-text-primary)";
                       } else if (t.type === "transfer") {
-                        amountDisplay = `(${formatEuro(t.amount)})`;
+                        amountDisplay = `(${amountDisplay})`;
                         amountColor = "var(--color-text-secondary)";
                       }
 
@@ -250,7 +213,6 @@ export function WalletDetailsPage({ wallet, onClose }) {
                 </VerticalListContainer>
               </OneColumnTemplate>
             );
-
           case 1:
             return (
               <OneColumnTemplate
