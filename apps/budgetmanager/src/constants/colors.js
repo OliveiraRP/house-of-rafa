@@ -18,3 +18,10 @@ export const WALLET_PALETTE = {
 };
 
 export const PALETTE_LIST = Object.values(WALLET_PALETTE);
+
+export const getColorIdFromHex = (hex) => {
+  const found = Object.values(WALLET_PALETTE).find(
+    (color) => color.hex.toUpperCase() === hex?.toUpperCase()
+  );
+  return found ? found.id : WALLET_PALETTE.INDIGO.id;
+};

@@ -148,7 +148,10 @@ export default function WalletsPage() {
       >
         <WalletDetailsPage
           wallet={selectedWallet}
-          onClose={() => setSelectedWallet(null)}
+          onClose={() => {
+            setSelectedWallet(null);
+            fetchWallets();
+          }}
         />
       </FullScreenOverlayTemplate>
     </OneColumnTemplate>

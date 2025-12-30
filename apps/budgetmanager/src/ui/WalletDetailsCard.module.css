@@ -1,0 +1,33 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.topSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nameColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  cursor: pointer;
+  gap: 6px;
+}
+
+.nameInput {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+}

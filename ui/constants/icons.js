@@ -10,4 +10,5 @@ export const ICON = {
   EYE: "TbEye",
   WALLET: "TbWallet",
   CHART: "TbChartDonut",
+  CHECK: "TbCheck",
 };
