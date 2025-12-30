@@ -48,3 +48,24 @@ export function SwitchListItemComponent({ text, state, onToggle }) {
     </div>
   );
 }
+
+export function IconSubTextListItemComponent({
+  icon,
+  text,
+  subtext,
+  value,
+  onClick,
+}) {
+  return (
+    <div className={styles.row} onClick={onClick}>
+      <div className={styles.leftSection}>
+        {icon}
+        <div className={styles.column}>
+          <span className={styles.title}>{text}</span>
+          <span className={styles.subtext}>{subtext}</span>
+        </div>
+      </div>
+      <div className={styles.text}>{value}</div>
+    </div>
+  );
+}

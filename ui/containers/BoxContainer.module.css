@@ -6,3 +6,13 @@
   align-items: center;
   overflow: hidden;
 }
+
+.roundBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  padding: 8px;
+  flex-shrink: 0;
+}

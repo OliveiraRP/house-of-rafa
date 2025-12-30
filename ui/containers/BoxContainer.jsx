@@ -20,3 +20,24 @@ export function EmptyBoxContainer({
     </div>
   );
 }
+
+export function EmptyRoundBoxContainer({
+  children,
+  modifier,
+  color = "var(--color-bg-hover)",
+  onClick,
+}) {
+  return (
+    <div
+      className={styles.roundBox}
+      onClick={onClick}
+      style={{
+        backgroundColor: color,
+        cursor: onClick ? "pointer" : "default",
+        ...modifier,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
