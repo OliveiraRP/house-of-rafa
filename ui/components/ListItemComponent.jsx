@@ -18,6 +18,15 @@ export function TextListItemComponent({ text, value, onClick }) {
   );
 }
 
+export function IconListItemComponent({ text, icon, onClick }) {
+  return (
+    <div className={styles.row} onClick={onClick}>
+      <span className={styles.title}>{text}</span>
+      {icon}
+    </div>
+  );
+}
+
 export function InputListItemComponent({
   text,
   value,

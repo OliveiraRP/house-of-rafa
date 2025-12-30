@@ -10,6 +10,7 @@ import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { SectionHeaderComponent } from "@ui/components/headers/SectionHeaderComponent";
 import { GridContainer } from "@ui/containers/GridContainer";
 import {
+  IconListItemComponent,
   SwitchListItemComponent,
   InputListItemComponent,
 } from "@ui/components/ListItemComponent";
@@ -22,6 +23,7 @@ import { WALLET_ICONS } from "../../constants/icons";
 import { formatEuro } from "../../utils/currency";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useUpdateWallet } from "../../hooks/useWallets";
+import { WalletTransactionsPage } from "./WalletTransactionsPage";
 
 export function WalletDetailsPage({ wallet, onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
@@ -144,9 +146,15 @@ export function WalletDetailsPage({ wallet, onClose }) {
                           value={
                             <TextRes text={amountDisplay} color={amountColor} />
                           }
+                          onClick={() => navigateTo(0)}
                         />
                       );
                     })}
+                    <IconListItemComponent
+                      text={"See all transactions"}
+                      icon={<IconRes icon={ICON.NEXT} size={20} />}
+                      onClick={() => navigateTo(2)}
+                    />
                   </VerticalListContainer>
                 )}
                 <WalletDetailsCard
@@ -182,7 +190,7 @@ export function WalletDetailsPage({ wallet, onClose }) {
                   )}
                   {wallet.annualBudget !== null && (
                     <InputListItemComponent
-                      text="Annual budget amount"
+                      text="Annual budget"
                       value={
                         walletData.annualBudget
                           ? formatEuro(walletData.annualBudget)
@@ -242,6 +250,14 @@ export function WalletDetailsPage({ wallet, onClose }) {
                   ))}
                 </GridContainer>
               </OneColumnTemplate>
+            );
+          case 2:
+            return (
+              <WalletTransactionsPage
+                wallet={wallet}
+                transactions={transactions}
+                onClose={() => navigateTo(0)}
+              />
             );
           default:
             return null;

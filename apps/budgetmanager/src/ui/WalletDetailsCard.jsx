@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { HorizontalColorPickerComponent } from "@ui/components/ColorPickerComponent";
-import { IconRes } from "@ui/utils/IconRes";
 import { TextRes } from "@ui/utils/TextRes";
 import styles from "./WalletDetailsCard.module.css";
+import { WalletIcon } from "./WalletIcon";
 
 export function WalletDetailsCard({
   colors,
@@ -33,18 +33,11 @@ export function WalletDetailsCard({
     <EmptyBoxContainer>
       <div className={styles.cardContainer}>
         <div className={styles.topSection}>
-          <EmptyBoxContainer
+          <WalletIcon
             color={selectedColorHex}
-            onClick={onIconClick}
-            modifier={{
-              height: "64px",
-              width: "64px",
-              padding: "10px",
-            }}
-          >
-            <IconRes icon={icon} size={48} />
-          </EmptyBoxContainer>
-
+            onIconClick={onIconClick}
+            icon={icon}
+          />
           <div className={styles.nameColumn}>
             <TextRes text="Name" color="var(--color-text-tertiary)" />
             {isEditing ? (

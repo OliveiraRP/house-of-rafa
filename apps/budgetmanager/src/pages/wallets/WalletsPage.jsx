@@ -4,7 +4,6 @@ import { CreateWalletPage } from "./CreateWalletPage";
 import { WalletDetailsPage } from "./WalletDetailsPage";
 import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
-import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import {
   TextButtonComponent,
   IconButtonComponent,
@@ -17,6 +16,7 @@ import { ICON } from "@ui/constants/icons";
 import { WalletsBalanceInfo } from "../../ui/WalletsBalanceInfo";
 import { formatEuro } from "../../utils/currency";
 import { useWallets, useArchiveWallet } from "../../hooks/useWallets";
+import { WalletIcon } from "../../ui/WalletIcon";
 
 export default function WalletsPage() {
   const { data: wallets = [] } = useWallets();
@@ -84,14 +84,7 @@ export default function WalletsPage() {
                 style={{ fontWeight: 700, fontSize: 24 }}
               />
             }
-            icon={
-              <EmptyBoxContainer
-                color={wallet.color}
-                modifier={{ height: "64px", width: "64px" }}
-              >
-                <IconRes icon={wallet.icon} size={48} />
-              </EmptyBoxContainer>
-            }
+            icon={<WalletIcon color={wallet.color} icon={wallet.icon} />}
             editIcon={ICON.ARCHIVE}
           />
         ))}

@@ -11,4 +11,5 @@ export const ICON = {
   WALLET: "TbWallet",
   CHART: "TbChartDonut",
   CHECK: "TbCheck",
+  NEXT: "TbChevronRight",
 };
