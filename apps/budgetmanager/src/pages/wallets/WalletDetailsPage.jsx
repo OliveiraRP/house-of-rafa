@@ -109,6 +109,7 @@ export function WalletDetailsPage({ wallet, onClose }) {
                     header={
                       <SectionHeaderComponent title="Latest transactions" />
                     }
+                    isElevated={true}
                   >
                     {transactions.map((t) => {
                       let subText =
@@ -171,7 +172,7 @@ export function WalletDetailsPage({ wallet, onClose }) {
                     setWalletData((prev) => ({ ...prev, name: newName }))
                   }
                 />
-                <VerticalListContainer>
+                <VerticalListContainer isElevated={true}>
                   {wallet.goal !== null && (
                     <InputListItemComponent
                       text="Goal amount"
@@ -255,7 +256,6 @@ export function WalletDetailsPage({ wallet, onClose }) {
             return (
               <WalletTransactionsPage
                 wallet={wallet}
-                transactions={transactions}
                 onClose={() => navigateTo(0)}
               />
             );

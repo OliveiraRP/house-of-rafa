@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 import walletsRoutes from "./routes/budget-manager/wallets.routes.js";
 import transactionRoutes from "./routes/budget-manager/transactions.routes.js";
+import userSettingsRoutes from "./routes/budget-manager/userSettings.routes.js";
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use("/api/v1/auth", authRoutes);
 // Budget Manager
 app.use("/api/v1/wallets", authMiddleware, walletsRoutes);
 app.use("/api/v1/transactions", authMiddleware, transactionRoutes);
+app.use("/api/v1/settings", authMiddleware, userSettingsRoutes);
 
 export default app;

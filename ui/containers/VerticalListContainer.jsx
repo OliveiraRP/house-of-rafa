@@ -1,22 +1,28 @@
 import styles from "./VerticalListContainer.module.css";
 
-export function VerticalListContainer({ header, children, modifier }) {
+export function VerticalListContainer({ header, children, isElevated }) {
   return (
-    <div style={modifier}>
-      <div className={styles.container}>
-        {header}
-        <div className={styles.list}>{children}</div>
+    <div className={styles.container}>
+      {header}
+      <div
+        className={`${styles.list} ${isElevated ? styles.elevatedList : ""}`}
+      >
+        {children}
       </div>
     </div>
   );
 }
 
-export function SpacedVerticalListContainer({ header, children, modifier }) {
+export function SpacedVerticalListContainer({ header, children, isElevated }) {
   return (
-    <div style={modifier}>
-      <div className={styles.container}>
-        {header}
-        <div className={styles.spacedList}>{children}</div>
+    <div className={styles.container}>
+      {header}
+      <div
+        className={`${styles.spacedList} ${
+          isElevated ? styles.elevatedList : ""
+        }`}
+      >
+        {children}
       </div>
     </div>
   );

@@ -1,18 +1,8 @@
 import {
-  getTransactionsByUser,
   getTransactionById,
   getTransactionsByWallet,
+  getTransactionsByTimeframe,
 } from "../../repositories/budget-manager/transactions.repository.js";
-
-export async function fetchTransactions(req, res) {
-  try {
-    const transactions = await getTransactionsByUser(req.userId);
-    res.json(transactions);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch transactions" });
-  }
-}
 
 export async function fetchTransactionById(req, res) {
   const transactionId = Number(req.params.id);
@@ -37,6 +27,22 @@ export async function fetchTransactionsByWallet(req, res) {
 
   try {
     const transactions = await getTransactionsByWallet(walletId, req.userId);
+    res.json(transactions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch transactions" });
+  }
+}
+
+export async function fetchTransactionsByTimeframe(req, res) {
+  const { startDate, endDate } = req.query;
+
+  try {
+    const transactions = await getTransactionsByTimeframe(
+      req.userId,
+      startDate,
+      endDate
+    );
     res.json(transactions);
   } catch (err) {
     console.error(err);

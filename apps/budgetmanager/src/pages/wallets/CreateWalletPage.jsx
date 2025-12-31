@@ -96,7 +96,7 @@ export function CreateWalletPage({ onClose }) {
                     setWalletData((prev) => ({ ...prev, name: newName }))
                   }
                 />
-                <VerticalListContainer>
+                <VerticalListContainer isElevated={true}>
                   <TextListItemComponent
                     text="Type"
                     value={walletData.type}
@@ -146,7 +146,9 @@ export function CreateWalletPage({ onClose }) {
                   />
                 }
               >
-                <VerticalListContainer>
+                <VerticalListContainer
+                  modifier={{ "--list-bg": "var(--color-bg-hover)" }}
+                >
                   {Object.values(WALLET_TYPES).map((type) => (
                     <EmptyListItemComponent
                       key={type}

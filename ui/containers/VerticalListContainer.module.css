@@ -7,9 +7,16 @@
 .list {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-hover);
+  --list-bg: var(--color-bg-elevated);
+  --divider-color: var(--color-bg-hover);
+  background-color: var(--list-bg);
   border-radius: 16px;
   overflow: hidden;
+}
+
+.elevatedList {
+  --list-bg: var(--color-bg-hover);
+  --divider-color: var(--color-bg-highlight);
 }
 
 .list > * {
@@ -36,7 +43,7 @@
   right: 16px;
   left: 16px;
   height: 1px;
-  background-color: var(--color-bg-highlight);
+  background-color: var(--divider-color);
 }
 
 .spacedList {

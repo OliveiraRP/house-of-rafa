@@ -20,5 +20,5 @@ export default function RootPage() {
     checkAuth();
   }, []);
 
-  return <MainLayout user={user} />;
+  return <MainLayout />;
 }
