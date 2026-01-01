@@ -1,0 +1,35 @@
+.transactionHeader {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.typeSelector {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 24px;
+}
+
+.amountContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.amountInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: default;
+  caret-color: transparent;
+  border: none;
+  outline: none;
+  background: transparent;
+}

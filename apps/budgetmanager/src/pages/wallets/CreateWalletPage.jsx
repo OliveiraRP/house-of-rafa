@@ -146,9 +146,7 @@ export function CreateWalletPage({ onClose }) {
                   />
                 }
               >
-                <VerticalListContainer
-                  modifier={{ "--list-bg": "var(--color-bg-hover)" }}
-                >
+                <VerticalListContainer isElevated={true}>
                   {Object.values(WALLET_TYPES).map((type) => (
                     <EmptyListItemComponent
                       key={type}

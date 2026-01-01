@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
+import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import {
   TextButtonComponent,
@@ -12,10 +13,12 @@ import { useTransactionsByTimeframe } from "../../hooks/useTransactions";
 import { TimeframeComponent } from "@ui/components/TimeframeComponent";
 import { useUserSettings } from "../../hooks/useUserSettings";
 import { getEndDate, toLocalISOString } from "../../utils/date";
+import { CreateTransactionPage } from "./CreateTransactionPage";
 
 export default function OverviewPage() {
-  const [isEditMode, setIsEditMode] = useState(false);
   const { data: settings } = useUserSettings();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isCreateTransactionOpen, setIsCreateTransactionOpen] = useState(false);
 
   const initialDate = useMemo(() => {
     if (!settings?.bm_start_day) return null;
@@ -55,7 +58,10 @@ export default function OverviewPage() {
             />
           }
           rightButton={
-            <IconButtonComponent icon={<IconRes icon={ICON.ADD} />} />
+            <IconButtonComponent
+              icon={<IconRes icon={ICON.ADD} />}
+              onClick={() => setIsCreateTransactionOpen(true)}
+            />
           }
           title="Overview"
         />
@@ -67,6 +73,15 @@ export default function OverviewPage() {
       />
 
       <TransactionList transactions={transactions} />
+
+      <FullScreenOverlayTemplate
+        isOpen={isCreateTransactionOpen}
+        onClose={() => setIsCreateTransactionOpen(false)}
+      >
+        <CreateTransactionPage
+          onClose={() => setIsCreateTransactionOpen(false)}
+        />
+      </FullScreenOverlayTemplate>
     </OneColumnTemplate>
   );
 }

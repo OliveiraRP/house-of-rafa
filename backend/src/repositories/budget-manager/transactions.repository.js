@@ -88,3 +88,68 @@ export async function getTransactionsByTimeframe(userId, startDate, endDate) {
   const result = await pool.query(query, params);
   return result.rows.map((row) => new Transaction(row));
 }
+
+export async function createTransaction(userId, data) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const mainRes = await client.query(
+      `INSERT INTO transactions (user_id, amount, date, description, category_id, type, exclude_from_wallet)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING id`,
+      [
+        userId,
+        data.amount,
+        data.date,
+        data.description,
+        data.categoryId,
+        data.type,
+        data.excludeFromWallet || false,
+      ]
+    );
+    const transactionId = mainRes.rows[0].id;
+
+    if (data.type === "expense") {
+      await client.query(
+        "INSERT INTO transaction_expense (transaction_id, wallet_id) VALUES ($1, $2)",
+        [transactionId, data.walletId]
+      );
+      await client.query(
+        "UPDATE wallets SET balance = balance - $1 WHERE id = $2 AND user_id = $3",
+        [data.amount, data.walletId, userId]
+      );
+    } else if (data.type === "income") {
+      await client.query(
+        "INSERT INTO transaction_income (transaction_id, wallet_id) VALUES ($1, $2)",
+        [transactionId, data.walletId]
+      );
+      await client.query(
+        "UPDATE wallets SET balance = balance + $1 WHERE id = $2 AND user_id = $3",
+        [data.amount, data.walletId, userId]
+      );
+    } else if (data.type === "transfer") {
+      await client.query(
+        "INSERT INTO transaction_transfer (transaction_id, from_wallet_id, to_wallet_id) VALUES ($1, $2, $3)",
+        [transactionId, data.fromWalletId, data.toWalletId]
+      );
+      await client.query(
+        "UPDATE wallets SET balance = balance - $1 WHERE id = $2 AND user_id = $3",
+        [data.amount, data.fromWalletId, userId]
+      );
+      await client.query(
+        "UPDATE wallets SET balance = balance + $1 WHERE id = $2 AND user_id = $3",
+        [data.amount, data.toWalletId, userId]
+      );
+    }
+
+    await client.query("COMMIT");
+    return { id: transactionId, ...data };
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+}
