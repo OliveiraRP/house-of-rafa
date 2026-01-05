@@ -6,7 +6,6 @@ import { TwoButtonSubtitlePageHeaderComponent } from "@ui/components/headers/Pag
 import { VerticalListContainer } from "@ui/containers/VerticalListContainer";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import {
-  EmptyListItemComponent,
   InputListItemComponent,
   SwitchListItemComponent,
   IconSubTextListItemComponent,
@@ -14,19 +13,15 @@ import {
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
 import { useCreateTransaction } from "../../hooks/useTransactions";
-import { useWallets } from "../../hooks/useWallets";
-import { useCategories } from "../../hooks/useCategories";
-import { useUserSettings } from "../../hooks/useUserSettings";
 import { TransactionHeader } from "../../ui/TransactionHeader";
 import { CategoryIcon } from "../../ui/CategoryIcon";
+import { CategorySelectionView } from "./CategorySelectionView";
+import { useSettingsContext } from "../../contexts/SettingsContext";
 
 export function CreateTransactionPage({ onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
   const createMutation = useCreateTransaction();
-
-  const { data: wallets = [] } = useWallets();
-  const { data: categories = [] } = useCategories();
-  const { data: settings } = useUserSettings();
+  const { wallets, categories, resolveData } = useSettingsContext();
 
   const [transactionData, setTransactionData] = useState({
     type: "expense",
@@ -41,54 +36,12 @@ export function CreateTransactionPage({ onClose }) {
     excludeFromWallet: false,
   });
 
-  const selectedWalletId = useMemo(() => {
-    if (transactionData.walletId) return transactionData.walletId;
-    const settingId =
-      transactionData.type === "income"
-        ? settings?.bm_default_income_wallet_id
-        : settings?.bm_default_expense_wallet_id;
-    return settingId || wallets[0]?.id;
-  }, [transactionData.walletId, transactionData.type, settings, wallets]);
+  const resolvedData = resolveData(transactionData);
 
-  const selectedFromId = useMemo(() => {
-    return (
-      transactionData.fromWalletId ||
-      settings?.bm_default_transfer_from_wallet_id ||
-      wallets[0]?.id
-    );
-  }, [transactionData.fromWalletId, settings, wallets]);
-
-  const selectedToId = useMemo(() => {
-    return (
-      transactionData.toWalletId ||
-      settings?.bm_default_transfer_to_wallet_id ||
-      wallets[1]?.id ||
-      wallets[0]?.id
-    );
-  }, [transactionData.toWalletId, settings, wallets]);
-
-  const filteredCategories = useMemo(() => {
-    return categories.filter((c) => c.group_type === transactionData.type);
-  }, [categories, transactionData.type]);
-
-  const selectedCategoryId = useMemo(() => {
-    if (transactionData.categoryId) return transactionData.categoryId;
-    const settingId =
-      transactionData.type === "income"
-        ? settings?.bm_default_income_category_id
-        : transactionData.type === "expense"
-        ? settings?.bm_default_expense_category_id
-        : settings?.bm_default_transfer_category_id;
-    return settingId || filteredCategories[0]?.id;
-  }, [
-    transactionData.categoryId,
-    transactionData.type,
-    settings,
-    filteredCategories,
-  ]);
-
-  const getWallet = (id) => wallets.find((w) => w.id === id);
-  const getCategory = (id) => categories.find((c) => c.id === id);
+  const filteredCategories = useMemo(
+    () => categories.filter((c) => c.group_type === transactionData.type),
+    [categories, transactionData.type]
+  );
 
   const handleSubmit = () => {
     if (!transactionData.amount || Number(transactionData.amount) <= 0) return;
@@ -96,11 +49,13 @@ export function CreateTransactionPage({ onClose }) {
     const payload = {
       ...transactionData,
       amount: Number(transactionData.amount),
-      walletId: transactionData.type !== "transfer" ? selectedWalletId : null,
-      fromWalletId: transactionData.type === "transfer" ? selectedFromId : null,
-      toWalletId: transactionData.type === "transfer" ? selectedToId : null,
-      categoryId:
-        transactionData.type !== "transfer" ? selectedCategoryId : null,
+      walletId:
+        transactionData.type !== "transfer" ? resolvedData.wallet?.id : null,
+      fromWalletId:
+        transactionData.type === "transfer" ? resolvedData.from?.id : null,
+      toWalletId:
+        transactionData.type === "transfer" ? resolvedData.to?.id : null,
+      categoryId: resolvedData.category?.id || null,
     };
 
     createMutation.mutate(payload, {
@@ -108,6 +63,8 @@ export function CreateTransactionPage({ onClose }) {
       onError: (err) => alert(err.message),
     });
   };
+
+  if (!resolvedData.wallet && transactionData.type !== "transfer") return null;
 
   return (
     <ViewSwitcher view={view} direction={direction}>
@@ -162,14 +119,12 @@ export function CreateTransactionPage({ onClose }) {
                   {transactionData.type !== "transfer" ? (
                     <IconSubTextListItemComponent
                       text="Wallet"
-                      value={
-                        getWallet(selectedWalletId)?.name || "Select wallet"
-                      }
+                      value={resolvedData.wallet?.name || "Select wallet"}
                       onClick={() => navigateTo(2)}
                       icon={
                         <CategoryIcon
-                          color={getWallet(selectedWalletId)?.color}
-                          icon={getWallet(selectedWalletId)?.icon}
+                          color={resolvedData.wallet?.color}
+                          icon={resolvedData.wallet?.icon}
                         />
                       }
                     />
@@ -177,25 +132,23 @@ export function CreateTransactionPage({ onClose }) {
                     <>
                       <IconSubTextListItemComponent
                         text="From"
-                        value={
-                          getWallet(selectedFromId)?.name || "Select wallet"
-                        }
+                        value={resolvedData.from?.name || "Select wallet"}
                         onClick={() => navigateTo(3)}
                         icon={
                           <CategoryIcon
-                            color={getWallet(selectedFromId)?.color}
-                            icon={getWallet(selectedFromId)?.icon}
+                            color={resolvedData.from?.color}
+                            icon={resolvedData.from?.icon}
                           />
                         }
                       />
                       <IconSubTextListItemComponent
                         text="To"
-                        value={getWallet(selectedToId)?.name || "Select wallet"}
+                        value={resolvedData.to?.name || "Select wallet"}
                         onClick={() => navigateTo(4)}
                         icon={
                           <CategoryIcon
-                            color={getWallet(selectedToId)?.color}
-                            icon={getWallet(selectedToId)?.icon}
+                            color={resolvedData.to?.color}
+                            icon={resolvedData.to?.icon}
                           />
                         }
                       />
@@ -204,16 +157,12 @@ export function CreateTransactionPage({ onClose }) {
 
                   <IconSubTextListItemComponent
                     text="Category"
-                    value={
-                      getCategory(selectedCategoryId)?.name || "Select category"
-                    }
+                    value={resolvedData.category?.name || "Select category"}
                     onClick={() => navigateTo(5)}
                     icon={
                       <CategoryIcon
-                        color={getCategory(selectedCategoryId)?.color}
-                        icon={
-                          getCategory(selectedCategoryId)?.icon || ICON.CATEGORY
-                        }
+                        color={resolvedData.category?.color}
+                        icon={resolvedData.category?.icon}
                       />
                     }
                   />
@@ -267,15 +216,18 @@ export function CreateTransactionPage({ onClose }) {
 
           case 5:
             return (
-              <SelectionView
-                title="Select category"
-                items={filteredCategories}
+              <CategorySelectionView
+                categories={filteredCategories}
                 onSelect={(c) =>
                   setTransactionData((prev) => ({ ...prev, categoryId: c.id }))
                 }
                 onBack={() => navigateTo(0)}
+                onCreateNew={() => navigateTo(6)}
               />
             );
+
+          case 6:
+            return <div>{/* TODO: Implement CreateCategoryPage */}</div>;
 
           default:
             return null;

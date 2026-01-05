@@ -8,6 +8,7 @@ export async function getAllCategories(userId) {
         c.name,
         c.icon,
         c.exclude_from_overview,
+        cg.name as group_name,
         cg.color,
         cg.type as group_type
      FROM categories c
