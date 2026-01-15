@@ -69,3 +69,62 @@ export function WalletDetailsCard({
     </EmptyBoxContainer>
   );
 }
+
+export function CategoryDetailsCard({
+  name,
+  icon,
+  groupColor,
+  onIconClick,
+  onNameChange,
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [isEditing]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") setIsEditing(false);
+    if (e.key === "Escape") setIsEditing(false);
+  };
+
+  return (
+    <EmptyBoxContainer>
+      <div className={styles.cardContainer}>
+        <div className={styles.topSection}>
+          <WalletIcon
+            color={groupColor}
+            onIconClick={onIconClick}
+            icon={icon}
+          />
+          <div className={styles.nameColumn}>
+            <TextRes text="Name" color="var(--color-text-tertiary)" />
+            {isEditing ? (
+              <input
+                ref={inputRef}
+                className={styles.nameInput}
+                value={name}
+                onChange={(e) => onNameChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={() => setIsEditing(false)}
+              />
+            ) : (
+              <div onClick={() => setIsEditing(true)}>
+                <TextRes
+                  text={name || "New Category"}
+                  color="var(--color-text-primary)"
+                  fontWeight={600}
+                  fontSize={18}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </EmptyBoxContainer>
+  );
+}

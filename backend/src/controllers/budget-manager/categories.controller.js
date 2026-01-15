@@ -1,4 +1,8 @@
-import { getAllCategories } from "../../repositories/budget-manager/categories.repository.js";
+import {
+  getAllCategories,
+  createCategory,
+  getAllCategoryGroups,
+} from "../../repositories/budget-manager/categories.repository.js";
 
 export async function fetchAllCategories(req, res) {
   try {
@@ -7,5 +11,29 @@ export async function fetchAllCategories(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch categories" });
+  }
+}
+
+export async function fetchCategoryGroups(req, res) {
+  try {
+    const groups = await getAllCategoryGroups(req.userId);
+    res.json(groups);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch groups" });
+  }
+}
+
+export async function createNewCategory(req, res) {
+  try {
+    const { category_group_id, name, icon, excludeFromOverview } = req.body;
+    const category = await createCategory(req.userId, {
+      category_group_id,
+      name,
+      icon,
+      excludeFromOverview,
+    });
+    res.status(201).json(category);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create category" });
   }
 }

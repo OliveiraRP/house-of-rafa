@@ -9,7 +9,7 @@ import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
 import { CategoryIcon } from "../../ui/CategoryIcon";
 
-export function CategorySelectionView({
+export function CategorySelectionPage({
   categories,
   onSelect,
   onBack,
@@ -17,7 +17,7 @@ export function CategorySelectionView({
 }) {
   const groupedCategories = useMemo(() => {
     return categories.reduce((acc, cat) => {
-      const groupName = cat.group_name || "Uncategorized";
+      const groupName = cat.group_name;
       if (!acc[groupName]) acc[groupName] = [];
       acc[groupName].push(cat);
       return acc;

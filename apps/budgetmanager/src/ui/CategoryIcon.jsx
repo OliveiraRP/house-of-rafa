@@ -14,7 +14,7 @@ export function CategoryIcon({ icon, color, size = 36, iconSize = 24 }) {
           padding: "8px",
         }}
       >
-        <IconRes icon={icon || ICON.WALLET} size={iconSize} />
+        <IconRes icon={icon} size={iconSize} />
       </EmptyRoundBoxContainer>
     </div>
   );

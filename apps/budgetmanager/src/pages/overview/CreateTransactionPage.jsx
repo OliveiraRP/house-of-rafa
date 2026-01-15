@@ -15,8 +15,9 @@ import { ICON } from "@ui/constants/icons";
 import { useCreateTransaction } from "../../hooks/useTransactions";
 import { TransactionHeader } from "../../ui/TransactionHeader";
 import { CategoryIcon } from "../../ui/CategoryIcon";
-import { CategorySelectionView } from "./CategorySelectionView";
+import { CategorySelectionPage } from "./CategorySelectionPage";
 import { useSettingsContext } from "../../contexts/SettingsContext";
+import { CreateCategoryPage } from "./CreateCategoryPage";
 
 export function CreateTransactionPage({ onClose }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
@@ -216,7 +217,7 @@ export function CreateTransactionPage({ onClose }) {
 
           case 5:
             return (
-              <CategorySelectionView
+              <CategorySelectionPage
                 categories={filteredCategories}
                 onSelect={(c) =>
                   setTransactionData((prev) => ({ ...prev, categoryId: c.id }))
@@ -227,7 +228,7 @@ export function CreateTransactionPage({ onClose }) {
             );
 
           case 6:
-            return <div>{/* TODO: Implement CreateCategoryPage */}</div>;
+            return <CreateCategoryPage onBack={() => navigateTo(5)} />;
 
           default:
             return null;
