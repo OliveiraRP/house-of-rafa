@@ -41,3 +41,13 @@ export async function createCategory(
   );
   return result.rows[0];
 }
+
+export async function createCategoryGroup(userId, { name, type, color }) {
+  const result = await pool.query(
+    `INSERT INTO category_groups (user_id, name, type, color)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, name, type, color`,
+    [userId, name, type, color]
+  );
+  return result.rows[0];
+}

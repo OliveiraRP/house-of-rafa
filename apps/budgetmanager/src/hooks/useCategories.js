@@ -58,3 +58,29 @@ export function useCreateCategory() {
     },
   });
 }
+
+export function useCreateCategoryGroup() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (newGroup) => {
+      const res = await fetch(`${ENV.BACKEND_URL}/api/v1/categories/groups`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newGroup),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to create category group");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: KEYS.groups });
+    },
+  });
+}

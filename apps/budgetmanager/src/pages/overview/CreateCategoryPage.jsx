@@ -4,6 +4,7 @@ import { ViewSwitcher } from "@ui/animations/ViewSwitcher";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { TwoButtonSubtitlePageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
 import { VerticalListContainer } from "@ui/containers/VerticalListContainer";
+import { EmptyBoxContainer } from "@ui/containers/BoxContainer";
 import { SectionHeaderComponent } from "@ui/components/headers/SectionHeaderComponent";
 import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { GridContainer } from "@ui/containers/GridContainer";
@@ -11,20 +12,26 @@ import {
   TextListItemComponent,
   SwitchListItemComponent,
   IconSubTextListItemComponent,
+  InputListItemComponent,
 } from "@ui/components/ListItemComponent";
+import { HorizontalColorPickerComponent } from "@ui/components/ColorPickerComponent";
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
 import { WALLET_ICONS } from "../../constants/icons";
+import { PALETTE_LIST } from "../../constants/colors";
 import { CategoryIcon } from "../../ui/CategoryIcon";
 import { CategoryDetailsCard } from "../../ui/WalletDetailsCard";
+import { TypeSelector } from "../../ui/TransactionHeader";
 import {
   useCreateCategory,
   useCategoryGroups,
+  useCreateCategoryGroup,
 } from "../../hooks/useCategories";
 
 export function CreateCategoryPage({ onBack }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
   const createMutation = useCreateCategory();
+  const createGroupMutation = useCreateCategoryGroup();
   const { data: allGroups = [] } = useCategoryGroups();
 
   const [categoryData, setCategoryData] = useState({
@@ -32,6 +39,12 @@ export function CreateCategoryPage({ onBack }) {
     icon: WALLET_ICONS.at(0),
     category_group_id: null,
     excludeFromOverview: false,
+  });
+
+  const [newGroupData, setNewGroupData] = useState({
+    name: "",
+    type: "expense",
+    color: PALETTE_LIST[0].id,
   });
 
   const selectedGroup = useMemo(() => {
@@ -49,7 +62,7 @@ export function CreateCategoryPage({ onBack }) {
     }));
   }, [allGroups]);
 
-  const handleSubmit = () => {
+  const handleSubmitCategory = () => {
     const finalGroupId = categoryData.category_group_id || allGroups[0]?.id;
 
     const payload = {
@@ -61,6 +74,34 @@ export function CreateCategoryPage({ onBack }) {
 
     createMutation.mutate(payload, {
       onSuccess: onBack,
+      onError: (err) => alert(err.message),
+    });
+  };
+
+  const handleSubmitCategoryGroup = () => {
+    const selectedPaletteColor = PALETTE_LIST.find(
+      (c) => c.id === newGroupData.color
+    );
+
+    const payload = {
+      name: newGroupData.name,
+      type: newGroupData.type,
+      color: selectedPaletteColor?.hex,
+    };
+
+    createGroupMutation.mutate(payload, {
+      onSuccess: (createdGroup) => {
+        setCategoryData((prev) => ({
+          ...prev,
+          category_group_id: createdGroup.id,
+        }));
+        navigateTo(1);
+        setNewGroupData({
+          name: "",
+          type: "expense",
+          color: PALETTE_LIST[0].id,
+        });
+      },
       onError: (err) => alert(err.message),
     });
   };
@@ -84,7 +125,7 @@ export function CreateCategoryPage({ onBack }) {
                     rightButton={
                       <IconButtonComponent
                         icon={<IconRes icon={ICON.ADD} />}
-                        onClick={handleSubmit}
+                        onClick={handleSubmitCategory}
                         disabled={
                           !categoryData.name || createMutation.isPending
                         }
@@ -139,6 +180,12 @@ export function CreateCategoryPage({ onBack }) {
                       />
                     }
                     title="Select category group"
+                    rightButton={
+                      <IconButtonComponent
+                        icon={<IconRes icon={ICON.ADD} />}
+                        onClick={() => navigateTo(3)}
+                      />
+                    }
                   />
                 }
               >
@@ -202,6 +249,60 @@ export function CreateCategoryPage({ onBack }) {
                     </div>
                   ))}
                 </GridContainer>
+              </OneColumnTemplate>
+            );
+
+          case 3:
+            return (
+              <OneColumnTemplate
+                header={
+                  <TwoButtonSubtitlePageHeaderComponent
+                    leftButton={
+                      <IconButtonComponent
+                        icon={<IconRes icon={ICON.BACK} />}
+                        onClick={() => navigateTo(0)}
+                      />
+                    }
+                    title="Create category group"
+                    rightButton={
+                      <IconButtonComponent
+                        icon={<IconRes icon={ICON.ADD} />}
+                        onClick={handleSubmitCategoryGroup}
+                        style={{
+                          backgroundColor: "var(--color-accent-primary)",
+                        }}
+                      />
+                    }
+                  />
+                }
+              >
+                <TypeSelector
+                  activeType={newGroupData.type}
+                  onTypeChange={(newType) =>
+                    setNewGroupData((prev) => ({ ...prev, type: newType }))
+                  }
+                />
+
+                <EmptyBoxContainer>
+                  <HorizontalColorPickerComponent
+                    colors={PALETTE_LIST}
+                    selectedColorId={newGroupData.color}
+                    onSelect={(id) =>
+                      setNewGroupData((prev) => ({ ...prev, color: id }))
+                    }
+                  />
+                </EmptyBoxContainer>
+
+                <VerticalListContainer isElevated={true}>
+                  <InputListItemComponent
+                    text="Name"
+                    value={newGroupData.name}
+                    placeholder="Name"
+                    onChange={(val) =>
+                      setNewGroupData((prev) => ({ ...prev, name: val }))
+                    }
+                  />
+                </VerticalListContainer>
               </OneColumnTemplate>
             );
 
