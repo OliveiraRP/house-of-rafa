@@ -78,3 +78,45 @@ export function IconSubTextListItemComponent({
     </div>
   );
 }
+
+export function DateListItemComponent({ text, value, onChange }) {
+  const formatDateLabel = (dateStr) => {
+    if (!dateStr) return "";
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    const diffTime = targetDate - today;
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+    if (diffDays === -1) return "Yesterday";
+
+    return targetDate.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+    });
+  };
+
+  return (
+    <div className={styles.row}>
+      <span className={styles.title}>{text}</span>
+      <span className={styles.text}>{formatDateLabel(value)}</span>
+      <input
+        type="date"
+        className={styles.dateInput}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </div>
+  );
+}

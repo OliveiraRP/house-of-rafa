@@ -9,6 +9,7 @@ import {
   InputListItemComponent,
   SwitchListItemComponent,
   IconSubTextListItemComponent,
+  DateListItemComponent,
 } from "@ui/components/ListItemComponent";
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
@@ -116,7 +117,7 @@ export function CreateTransactionPage({ onClose }) {
                   }
                 />
 
-                <VerticalListContainer isElevated={true} title="Details">
+                <VerticalListContainer isElevated={true}>
                   {transactionData.type !== "transfer" ? (
                     <IconSubTextListItemComponent
                       text="Wallet"
@@ -170,6 +171,16 @@ export function CreateTransactionPage({ onClose }) {
                 </VerticalListContainer>
 
                 <VerticalListContainer isElevated={true}>
+                  <DateListItemComponent
+                    text="Date"
+                    value={transactionData.date}
+                    onChange={(newDate) =>
+                      setTransactionData((prev) => ({
+                        ...prev,
+                        date: newDate,
+                      }))
+                    }
+                  />
                   <InputListItemComponent
                     text="Description"
                     value={transactionData.description}
