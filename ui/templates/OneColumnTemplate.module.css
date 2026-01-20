@@ -3,9 +3,9 @@
   flex-direction: column;
   padding: 0 16px 0 16px;
   color: var(--color-text-primary);
-  padding-top: calc(44px + 5px);
-  margin-top: -44px; /* Pulls content under the navbar */
+  padding-top: 64px;
   padding-bottom: 98px;
+  min-height: 100vh;
 }
 
 .content {
