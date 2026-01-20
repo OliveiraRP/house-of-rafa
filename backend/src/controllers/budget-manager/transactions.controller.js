@@ -3,6 +3,8 @@ import {
   getTransactionsByWallet,
   getTransactionsByTimeframe,
   createTransaction,
+  updateTransaction,
+  deleteTransaction,
 } from "../../repositories/budget-manager/transactions.repository.js";
 
 export async function fetchTransactionById(req, res) {
@@ -64,5 +66,33 @@ export async function addTransaction(req, res) {
   } catch (err) {
     console.error("Error creating transaction:", err);
     res.status(500).json({ error: "Failed to create transaction" });
+  }
+}
+
+export async function editTransaction(req, res) {
+  const transactionId = Number(req.params.id);
+  try {
+    const updated = await updateTransaction(
+      req.userId,
+      transactionId,
+      req.body
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+export async function removeTransaction(req, res) {
+  const transactionId = Number(req.params.id);
+  try {
+    await deleteTransaction(req.userId, transactionId);
+    res.status(204).send();
+  } catch (err) {
+    console.error("Error deleting transaction:", err);
+    if (err.message === "Transaction not found") {
+      return res.status(404).json({ error: err.message });
+    }
+    res.status(500).json({ error: "Failed to delete transaction" });
   }
 }

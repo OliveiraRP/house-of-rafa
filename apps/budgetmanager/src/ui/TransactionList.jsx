@@ -7,7 +7,11 @@ import { EmptyRoundBoxContainer } from "@ui/containers/BoxContainer";
 import { formatEuro } from "../utils/currency";
 import { SubTitleSectionHeaderComponent } from "@ui/components/headers/SectionHeaderComponent";
 
-export function TransactionList({ transactions, isElevated }) {
+export function TransactionList({
+  transactions,
+  isElevated,
+  onTransactionClick,
+}) {
   const groupedTransactions = useMemo(() => {
     const groups = {};
     const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -53,6 +57,7 @@ export function TransactionList({ transactions, isElevated }) {
             return (
               <IconSubTextListItemComponent
                 key={t.id}
+                onClick={() => onTransactionClick?.(t)}
                 icon={
                   <EmptyRoundBoxContainer
                     color={t.categoryGroupColor}

@@ -10,34 +10,61 @@ import {
   SwitchListItemComponent,
   IconSubTextListItemComponent,
   DateListItemComponent,
+  EmptyListItemComponent,
 } from "@ui/components/ListItemComponent";
 import { IconRes } from "@ui/utils/IconRes";
+import { TextRes } from "@ui/utils/TextRes";
 import { ICON } from "@ui/constants/icons";
-import { useCreateTransaction } from "../../hooks/useTransactions";
+import {
+  useCreateTransaction,
+  useUpdateTransaction,
+  useDeleteTransaction,
+} from "../../hooks/useTransactions";
 import { TransactionHeader } from "../../ui/TransactionHeader";
 import { CategoryIcon } from "../../ui/CategoryIcon";
 import { CategorySelectionPage } from "./CategorySelectionPage";
 import { useSettingsContext } from "../../contexts/SettingsContext";
 import { CreateCategoryPage } from "./CreateCategoryPage";
 
-export function CreateTransactionPage({ onClose }) {
+export function CreateTransactionPage({ onClose, initialData }) {
   const { view, direction, navigateTo } = useViewNavigation(0);
   const createMutation = useCreateTransaction();
+  const updateMutation = useUpdateTransaction();
+  const deleteMutation = useDeleteTransaction();
   const { wallets, categories, resolveData } = useSettingsContext();
 
-  const [transactionData, setTransactionData] = useState({
-    type: "expense",
-    amount: "",
-    date: new Date().toISOString().split("T")[0],
-    description: "",
-    walletId: null,
-    fromWalletId: null,
-    toWalletId: null,
-    categoryId: null,
-    recurrence: "none",
-    excludeFromWallet: false,
+  const [transactionData, setTransactionData] = useState(() => {
+    if (initialData && initialData.id) {
+      return {
+        id: initialData.id,
+        type: initialData.type || "expense",
+        amount: Math.abs(initialData.amount).toString(),
+        date: new Date(initialData.date).toISOString().split("T")[0],
+        description: initialData.description || "",
+        walletId: initialData.walletId,
+        fromWalletId: initialData.fromWalletId,
+        toWalletId: initialData.toWalletId,
+        categoryId: initialData.categoryId,
+        recurrence: initialData.recurrence || "none",
+        excludeFromWallet: initialData.excludeFromWallet || false,
+      };
+    }
+
+    return {
+      type: "expense",
+      amount: "",
+      date: new Date().toISOString().split("T")[0],
+      description: "",
+      walletId: null,
+      fromWalletId: null,
+      toWalletId: null,
+      categoryId: null,
+      recurrence: "none",
+      excludeFromWallet: false,
+    };
   });
 
+  const isEditing = Boolean(initialData?.id);
   const resolvedData = resolveData(transactionData);
 
   const filteredCategories = useMemo(
@@ -60,7 +87,16 @@ export function CreateTransactionPage({ onClose }) {
       categoryId: resolvedData.category?.id || null,
     };
 
-    createMutation.mutate(payload, {
+    const mutation = isEditing ? updateMutation : createMutation;
+
+    mutation.mutate(payload, {
+      onSuccess: onClose,
+      onError: (err) => alert(err.message),
+    });
+  };
+
+  const handleDelete = () => {
+    deleteMutation.mutate(transactionData.id, {
       onSuccess: onClose,
       onError: (err) => alert(err.message),
     });
@@ -83,10 +119,12 @@ export function CreateTransactionPage({ onClose }) {
                         onClick={onClose}
                       />
                     }
-                    title="New transaction"
+                    title={isEditing ? "Edit transaction" : "New transaction"}
                     rightButton={
                       <IconButtonComponent
-                        icon={<IconRes icon={ICON.ADD} />}
+                        icon={
+                          <IconRes icon={isEditing ? ICON.CHECK : ICON.ADD} />
+                        }
                         onClick={handleSubmit}
                         style={{
                           backgroundColor: "var(--color-accent-primary)",
@@ -203,6 +241,20 @@ export function CreateTransactionPage({ onClose }) {
                     }
                   />
                 </VerticalListContainer>
+
+                {isEditing && (
+                  <VerticalListContainer isElevated={true}>
+                    <EmptyListItemComponent
+                      onClick={handleDelete}
+                      text={
+                        <TextRes
+                          text={"Delete transaction"}
+                          color={"var(--color-error)"}
+                        />
+                      }
+                    />
+                  </VerticalListContainer>
+                )}
               </OneColumnTemplate>
             );
 

@@ -2,10 +2,7 @@ import { useState, useMemo } from "react";
 import { OneColumnTemplate } from "@ui/templates/OneColumnTemplate";
 import { FullScreenOverlayTemplate } from "@ui/templates/OverlayTemplate";
 import { TwoButtonPageHeaderComponent } from "@ui/components/headers/PageHeaderComponent";
-import {
-  TextButtonComponent,
-  IconButtonComponent,
-} from "@ui/components/ButtonComponent";
+import { IconButtonComponent } from "@ui/components/ButtonComponent";
 import { IconRes } from "@ui/utils/IconRes";
 import { ICON } from "@ui/constants/icons";
 import { TransactionList } from "../../ui/TransactionList";
@@ -17,8 +14,7 @@ import { CreateTransactionPage } from "./CreateTransactionPage";
 
 export default function OverviewPage() {
   const { data: settings } = useUserSettings();
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isCreateTransactionOpen, setIsCreateTransactionOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   const initialDate = useMemo(() => {
     if (!settings?.bm_start_day) return null;
@@ -51,16 +47,10 @@ export default function OverviewPage() {
     <OneColumnTemplate
       header={
         <TwoButtonPageHeaderComponent
-          leftButton={
-            <TextButtonComponent
-              text={!isEditMode ? "Edit" : "Done"}
-              onClick={() => setIsEditMode(!isEditMode)}
-            />
-          }
           rightButton={
             <IconButtonComponent
               icon={<IconRes icon={ICON.ADD} />}
-              onClick={() => setIsCreateTransactionOpen(true)}
+              onClick={() => setEditingTransaction({})}
             />
           }
           title="Overview"
@@ -72,14 +62,18 @@ export default function OverviewPage() {
         onRangeChange={setCurrentStart}
       />
 
-      <TransactionList transactions={transactions} />
+      <TransactionList
+        transactions={transactions}
+        onTransactionClick={(t) => setEditingTransaction(t)}
+      />
 
       <FullScreenOverlayTemplate
-        isOpen={isCreateTransactionOpen}
-        onClose={() => setIsCreateTransactionOpen(false)}
+        isOpen={Boolean(editingTransaction)}
+        onClose={() => setEditingTransaction(null)}
       >
         <CreateTransactionPage
-          onClose={() => setIsCreateTransactionOpen(false)}
+          initialData={editingTransaction}
+          onClose={() => setEditingTransaction(null)}
         />
       </FullScreenOverlayTemplate>
     </OneColumnTemplate>

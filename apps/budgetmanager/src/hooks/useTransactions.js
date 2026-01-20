@@ -56,3 +56,51 @@ export function useCreateTransaction() {
     },
   });
 }
+
+export function useUpdateTransaction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await fetch(
+        `${ENV.BACKEND_URL}/api/v1/transactions/${payload.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          credentials: "include",
+        }
+      );
+      if (!res.ok) throw new Error("Failed to update transaction");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["wallets"] });
+    },
+  });
+}
+
+export function useDeleteTransaction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id) => {
+      const response = await fetch(
+        `${ENV.BACKEND_URL}/api/v1/transactions/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to delete transaction");
+      }
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["wallets"] });
+    },
+  });
+}
